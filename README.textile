@@ -1,4 +1,3 @@
-h1=. tcd
+h1=. tcd (traffic control daemon)
 
-h2=. (traffic control daemon)
 
