@@ -1,3 +1,9 @@
 h1=. tcd (traffic control daemon)
 
+tcd is a traffic control daemon which uses live monitoring of 
+traffic, combined with user specified rules for which protocols are
+more important than others (voip over ssh, over gaming, over http 
+and file transfers, etc.), and tweaks the settings of "tcng":http://tcng.sourceforge.net/
+or "tc":http://linux.die.net/man/8/tc to guarantee the service 
+levels desired, on the fly.
 
