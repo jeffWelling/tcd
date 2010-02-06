@@ -17,3 +17,17 @@
     along with Traffic Control Daemon.  If not, see <http://www.gnu.org/licenses/>.
   
 =end
+autoload :Syslog, 'syslog'
+
+module TCD
+  class << self
+    def main
+      loop do
+        Syslog.open('tcd')
+        Syslog.crit('Omg Im in your syslog taking up disk spaces!')
+        Syslog.close
+        sleep 3
+      end
+    end
+  end
+end
