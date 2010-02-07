@@ -24,9 +24,8 @@ module TCD
   class << self
     def main
       loop do
-        Syslog.open('tcd')
-        Syslog.crit('Omg Im in your syslog taking up disk spaces!')
-        Syslog.close
+        extend TCD::Common
+        log "The thing is using this many bandwidths 0.0"
         sleep 3
       end
     end
