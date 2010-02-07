@@ -19,8 +19,10 @@
 =end
 module TCD
   module Common
-    def thing
-      puts 'the cock'
+    def log msg
+      Syslog.open 'Traffic Control Daemon'
+      Syslog.notice msg
+      Syslog.close
     end
   end
 end

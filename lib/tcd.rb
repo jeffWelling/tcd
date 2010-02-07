@@ -20,6 +20,7 @@
 autoload :Syslog, 'syslog'
 
 module TCD
+  autoload :Common, 'lib/tcd/Common'
   class << self
     def main
       loop do
