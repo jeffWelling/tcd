@@ -19,10 +19,15 @@
 =end
 module TCD
   module Common
+    
     def log msg
       Syslog.open 'Traffic Control Daemon'
       Syslog.notice msg
       Syslog.close
+    end
+
+    def retrieveData
+      
     end
   end
 end
