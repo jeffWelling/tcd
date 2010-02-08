@@ -25,9 +25,9 @@ module TCD
       Syslog.notice msg
       Syslog.close
     end
-
+    #Retrieve bandwidth statistics from pmacct
     def retrieveData
-      
+      `ssh -i traffic_control_daemon.key gir 2>/dev/null`
     end
   end
 end
