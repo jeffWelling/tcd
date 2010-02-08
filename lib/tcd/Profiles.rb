@@ -17,3 +17,19 @@
     along with Traffic Control Daemon.  If not, see <http://www.gnu.org/licenses/>.
   
 =end
+module TCD
+  module Profiles
+    PROFILES=[]
+    class << self
+      def loadProfiles
+        Dir.glob(File.expand_path("lib/tcd/profiles/*")).each {|profile|
+          if profile[/\.rb\s?$/]
+            load profile
+            PROFILES<< eval( "TCD::Profiles::#{File.basename(profile, '.rb').capitalize}" )
+            PROFILES.uniq!
+          end
+        }
+      end
+    end
+  end
+end
