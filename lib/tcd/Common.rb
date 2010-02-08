@@ -29,5 +29,7 @@ module TCD
     def retrieveData
       `ssh -i traffic_control_daemon.key gir 2>/dev/null`
     end
+    def getBytes src_str
+    end
   end
 end
