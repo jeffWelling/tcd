@@ -27,9 +27,10 @@ module TCD
     end
     #Retrieve bandwidth statistics from pmacct
     def retrieveData
-      `ssh -i traffic_control_daemon.key gir 2>/dev/null`
+      getBytes(`ssh -i traffic_control_daemon.key gir 2>/dev/null`)
     end
     def getBytes src_str
+      src_str.split("\n")[1].split(' ')[2].strip
     end
   end
 end
