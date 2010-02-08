@@ -33,7 +33,7 @@ module TCD
     def getBytes src_str
       src_str.split("\n")[1].split(' ')[2].strip
     end
-    #Return an array containing the IP addresses attached to the interface specified
+    #Return an array containing IP address => subnet mask pairs attached to the interface specified
     #An interface may have more than one IP bound to it.
     def getIPs interface
       return []
