@@ -38,5 +38,10 @@ module TCD
     def getIPs interface
       return []
     end
+    #return an array containing all networks available on an interface
+    #determined by looking at each IP and subnet mask on that interface
+    def getNetworks interface
+      return []
+    end
   end
 end
