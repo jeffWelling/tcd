@@ -17,7 +17,13 @@
     along with Traffic Control Daemon.  If not, see <http://www.gnu.org/licenses/>.
   
 =end
+
+current_dir=File.expand_path(File.dirname(__FILE__))
+unless $LOAD_PATH.first == (current_dir)
+  $LOAD_PATH.unshift(current_dir)
+end
 autoload :Syslog, 'syslog'
+autoload :IfconfigWrapper, 'ruby-ifconfig/lib/ifconfig.rb'
 
 module TCD
   autoload :Common, 'lib/tcd/Common'
