@@ -1,0 +1,3 @@
+[submodule "ruby-ifconfig"]
+	path = ruby-ifconfig
+	url = git://github.com/jeffWelling/ruby-ifconfig.git
