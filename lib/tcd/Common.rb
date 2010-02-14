@@ -33,9 +33,6 @@ module TCD
     def retrieveData _module
       _module.getStats
     end
-    def getBytes src_str
-      src_str.split("\n")[1].split(' ')[2].strip
-    end
     #Return an array containing IP address => subnet mask pairs attached to the interface specified
     #An interface may have more than one IP bound to it.
     def getIPs interface

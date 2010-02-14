@@ -28,9 +28,10 @@ module TCD
         #
         def getStats
           extend TCD::Common
-          {:eth0=>
-          {:in=> getBytes(`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_in.key gir 2>/dev/null`).to_i,      
-          :out=> getBytes(`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_out.key gir 2>/dev/null`).to_i}}
+          _in= getBytes(`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_in.key gir 2>/dev/null`) rescue 0
+          _out=getBytes(`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_out.key gir 2>/dev/null`) rescue 0
+          {:eth0=>   {:in=> _in.to_i, :out=> _out.to_i} }
+
         end
         #The first day of the billing cycle.
         #My billing cycle rollover date is the eleventh.  If I've downloaded up to 100% of my bandwidth limit and have to stop, on the
@@ -38,6 +39,9 @@ module TCD
         #You need to add a rolloverDay for each interface, and it must be in the for of a hash such as {:eth0=>11}.
         def rolloverDay
           {:eth0=>11}
+        end
+        def getBytes src_str
+          src_str.split("\n")[1].split(' ')[2].strip
         end
       end
     end
