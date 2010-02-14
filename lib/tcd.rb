@@ -39,7 +39,7 @@ module TCD
         end
         extend TCD::Common
         stats=TCD::IRB.getAllProfileStats
-        #log "The thing is using this many bandwidths => #{stats.inspect}"
+        log "The thing is using this many bandwidths => #{stats.inspect}"
         TCD::Storage.saveStats stats
         sleep 3
       end
