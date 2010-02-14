@@ -26,9 +26,8 @@ module TCD
       Syslog.close
     end
     #Retrieve bandwidth statistics from pmacct
-    def retrieveData
-      getBytes(`ssh -i traffic_control_daemon_in.key gir 2>/dev/null`).to_i + 
-      getBytes(`ssh -i traffic_control_daemon_out.key gir 2>/dev/null`).to_i
+    def retrieveData _module
+      _module.getStats
     end
     def getBytes src_str
       src_str.split("\n")[1].split(' ')[2].strip
