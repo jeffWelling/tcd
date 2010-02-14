@@ -21,11 +21,21 @@ module TCD
   module Storage
     class << self
       #Store the results of running getAllProfileStats
-      def storeStats stats
+      def saveStats stats
         saveStatsToDisk stats
       end
       #Save stats to disk in a ~/.tcd/stats/$profile_name/$if/$timestamp.yaml manner
       def saveStatsToDisk stats
+        extend TCD::Common
+        stats.each_key {|profile_name|
+          stats[profile_name].each_key {|interface|
+            next if interface==:timestamp
+            dir=File.expand_path("~/.tcd/stats/#{profile_name}/#{interface}/#{Time.now.year}-#{Time.now.month}/")
+            FileUtils.mkdir_p dir
+            writeFile( stats[profile_name][interface][:in], Time.now.strftime("%H-%M-%S")+".txt", '~/.tcd/', :append )
+            writeFile( stats[profile_name][interface][:out],Time.now.strftime("%H-%M-%S")+".txt", '~/.tcd/', :append )
+          }
+        }
       end
     end
   end
