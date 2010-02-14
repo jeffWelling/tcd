@@ -29,6 +29,19 @@ module TCD
       FileUtils.mkdir_p(File.expand_path(basedir)) unless File.exist?(File.expand_path(basedir))
       File.open( File.expand_path(basedir + filename), (append.nil? ? (File::WRONLY|File::TRUNC|File::CREAT) : ("a"))) {|f| f.write contents }
     end
+    def readFile filename, maxlines=0
+      i=0
+      read_so_far=[]
+      begin
+        f=File.open(File.expand_path(filename), 'r')
+        while (line=f.gets)
+          break if maxlines!=0 and i >= maxlines
+          read_so_far << line and i+=1
+        end
+      rescue Errno::ENOENT
+      end
+      read_so_far
+    end
     #Retrieve bandwidth statistics from pmacct
     def retrieveData _module
       _module.getStats
