@@ -30,11 +30,14 @@ module TCD
   autoload :Common, 'lib/tcd/Common'
   autoload :Profiles, 'lib/tcd/Profiles'
   autoload :IRB, 'lib/tcd/irb'
+  autoload :Storage, 'lib/tcd/Storage'
   class << self
     def main
       loop do
         extend TCD::Common
-        log "The thing is using this many bandwidths => #{TCD::IRB.getAllProfileStats}"
+        stats=TCD::IRB.getAllProfileStats
+        log "The thing is using this many bandwidths => #{stats.inspect}"
+        TCD::Storage.saveStats stats
         sleep 3
       end
     end
