@@ -24,7 +24,8 @@ module TCD
       def getAllProfileStats
         result={}
         PROFILES.each {|profile|
-          result.merge!({"#{profile}"[/[^:]+?$/].to_sym => profile.getStats}) if profile.useProfile?
+          stats_plus_timestamp=profile.getStats.merge({:timestamp=>Time.now})
+          result.merge!({"#{profile}"[/[^:]+?$/].to_sym => stats_plus_timestamp}) if profile.useProfile?
         }
         result
       end
