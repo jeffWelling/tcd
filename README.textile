@@ -7,23 +7,37 @@ more important than others (voip over ssh, over gaming, over http
 and file transfers, etc.), and tweaks the settings of "tcng":http://tcng.sourceforge.net/ or "tc":http://linux.die.net/man/8/tc 
 to guarantee the service levels desired, on the fly.
 
-Currently, tcd collects statistics and stores them to keep track of and report back to the user how much bandwidth has been used within their billing cycle.
-Configuration of tcd is done via profiles, which are located in the lib/tcd/profiles/ directory.  There should be an example profile in that directory.
-A profile consists of a couple of methods, useProfile() which returns true if the profile should apply on the current pass and false otherwise, getStats()
-which must return a hash in the form of
+Currently, tcd collects statistics and stores them to keep track of and report back 
+to the user how much bandwidth has been used within their billing cycle.  
+Configuration of tcd is done via profiles, which are located in the 
+lib/tcd/profiles/ directory.  There should be an example profile in that directory.
+A profile consists of a couple of methods, useProfile() which returns true if the i
+profile should apply on the current pass and false otherwise, getStats() which 
+must return a hash in the form of
 
 @{ :INTERFACE_NAME => {:in=>x,:out=>y}}@
 
-where INTERFACE_NAME is the name of the interface, and x and y are the number of received and transmitted bytes respectively.
-Executing getStats() must reset the counters - that is, if only one byte has been sent and received since the last time getStats() was called, x and y should both equal 1.  Not 1, plus however many bytes had traversed previously. 
-There are a couple of ways you can go about writing your getStats() method to retrieve the information, more can be found in the example in lib/tcd/profiles/.
-The last method you must define in your profile is rolloverDay().  rolloverDay() must return a hash whos keys are symbols of the interface names for that profile, one fixnum value per key, one key per interface.
-The fixnum value associated with the interface is the first day of the each billing cycle.  For example, my billing cycle rolls over on the eleventh, that is, the eleventh is the first day of every billing cycle for me,
-so I'd put 11. Each interface needs its own rollover day. 
-You can have more methods defined in your profile if you like, but those are the ones that must be defined because they are expected by the rest of the app.
+where INTERFACE_NAME is the name of the interface, and x and y are the number of 
+received and transmitted bytes respectively.  Executing getStats() must reset the 
+counters - that is, if only one byte has been sent and received since the last time 
+getStats() was called, x and y should both equal 1.  Not 1, plus however many bytes 
+had traversed previously. 
 
-To get started playing with tcd, you first need pmacct setup on your gateway to actually collect and report the statistics back to tcd.
-Setting up pmacct is explained in more detail below if you haven't done that already.  After pmacct is setup, you need to
+There are a couple of ways you can go about writing your getStats() method to 
+retrieve the information, more can be found in the example in lib/tcd/profiles/.
+The last method you must define in your profile is rolloverDay().  rolloverDay() 
+must return a hash whos keys are symbols of the interface names for that profile, 
+one fixnum value per key, one key per interface.  The fixnum value associated with 
+the interface is the first day of the each billing cycle.  For example, my billing 
+cycle rolls over on the eleventh, that is, the eleventh is the first day of every 
+billing cycle for me, so I'd put 11. Each interface needs its own rollover day.
+You can have more methods defined in your profile if you like, but those are the 
+ones that must be defined because they are expected by the rest of the app.
+
+To get started playing with tcd, you first need pmacct setup on your gateway to 
+actually collect and report the statistics back to tcd.  Setting up pmacct is 
+explained in more detail below if you haven't done that already.  After pmacct is 
+setup, you need to
 
 @git clone git://github.com/jeffWelling/tcd.git@
 
@@ -33,10 +47,12 @@ Then,
 @cd tcd@
 
 or whatever you chose to override the directory name with, if you did.
-Before being able to check any statistics, you are going to need to create a profile.
-After creating a profile,  you can run
+Before being able to check any statistics, you are going to need to create a 
+profile.  After creating a profile,  you can run
 
 @bin/tcd_collector start@
 
-and that should start the tcd_collector daemon.  This will create log files in ~/.tcd/stats for statistics collection and to calculate the total bandwidth used in a billing period.
+and that should start the tcd_collector daemon.  This will create log files 
+in ~/.tcd/stats for statistics collection and to calculate the total bandwidth 
+used in a billing period.
 
