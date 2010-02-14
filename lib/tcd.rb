@@ -28,6 +28,7 @@ autoload :IfconfigWrapper, 'ruby-ifconfig/lib/ifconfig.rb'
 module TCD
   autoload :Common, 'lib/tcd/Common'
   autoload :Profiles, 'lib/tcd/Profiles'
+  autoload :IRB, 'lib/tcd/irb'
   class << self
     def main
       loop do
