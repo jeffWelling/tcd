@@ -32,8 +32,8 @@ module TCD
             next if interface==:timestamp
             dir=File.expand_path("~/.tcd/stats/#{profile_name}/#{interface}/#{Time.now.year}-#{Time.now.month}/")
             FileUtils.mkdir_p dir
-            writeFile( stats[profile_name][interface][:in], Time.now.strftime("%H-%M-%S")+".txt", '~/.tcd/', :append )
-            writeFile( stats[profile_name][interface][:out],Time.now.strftime("%H-%M-%S")+".txt", '~/.tcd/', :append )
+            writeFile( stats[profile_name][interface][:in], Time.now.strftime("%H-%M-%S")+".txt", dir, :append )
+            writeFile( stats[profile_name][interface][:out],Time.now.strftime("%H-%M-%S")+".txt", dir, :append )
           }
         }
       end
