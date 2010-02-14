@@ -24,7 +24,7 @@ module TCD
       def getAllProfileStats
         result={}
         PROFILES.each {|profile|
-          result.merge!({"#{profile}"[/[^:]+?$/] => profile.getStats})
+          result.merge!({"#{profile}"[/[^:]+?$/] => profile.getStats}) if profile.useProfile?
         }
         result
       end
