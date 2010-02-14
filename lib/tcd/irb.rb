@@ -19,5 +19,15 @@
 =end
 module TCD
   module IRB
+    class << self
+      include TCD::Profiles
+      def getAllProfileStats
+        result={}
+        PROFILES.each {|profile|
+          result.merge!({"#{profile}"[/[^:]+?$/] => profile.getStats})
+        }
+        result
+      end
+    end
   end
 end
