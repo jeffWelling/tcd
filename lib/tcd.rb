@@ -33,6 +33,7 @@ module TCD
   autoload :Storage, 'lib/tcd/Storage'
   class << self
     def main
+      log "Traffic control daemon starting!"
       loop do
         Signal.trap("USR1") do
           log "Traffic control daemon still running!"
