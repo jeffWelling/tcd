@@ -25,7 +25,7 @@ module TCD
       Syslog.notice msg
       Syslog.close
     end
-    def writeFile contents, filename, basedir='~/.tcd/' append=nil
+    def writeFile contents, filename, basedir='~/.tcd/', append=nil
       FileUtils.mkdir(File.expand_path(basedir)) unless File.exist?(File.expand_path(basedir))
       File.open( File.expand_path(basedir + filename), (append.nil? ? (File::WRONLY|File::TRUNC|File::CREAT) : ("a"))) {|f| f.write contents }
     end
