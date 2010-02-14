@@ -26,7 +26,7 @@ $LOAD_PATH << (File.dirname(current_dir))
 require 'rubygems'
 require 'daemons'
 require 'lib/tcd'
-puts $LOAD_PATH
+
 Daemons.run_proc('tcd_collector') do
   TCD.main
 end
