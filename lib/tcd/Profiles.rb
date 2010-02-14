@@ -25,7 +25,7 @@ module TCD
         Dir.glob(File.expand_path("lib/tcd/profiles/*")).each{|profile_filename|
           if profile_filename[/\.rb\s?$/]
             load profile_filename
-            PROFILES << eval( "TCD::Profiles::#{File.basename(profile_filename).capitalize}" )
+            PROFILES << eval( "TCD::Profiles::#{File.basename(profile_filename, '.rb').capitalize}" )
             PROFILES.uniq!
           end
         }
