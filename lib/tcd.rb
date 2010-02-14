@@ -24,6 +24,7 @@ unless $LOAD_PATH.first == (current_dir)
 end
 autoload :Syslog, 'syslog'
 autoload :IfconfigWrapper, 'ruby-ifconfig/lib/ifconfig.rb'
+autoload :FileUtils, 'fileutils'
 
 module TCD
   autoload :Common, 'lib/tcd/Common'
