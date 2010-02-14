@@ -32,6 +32,13 @@ module TCD
           {:in=> getBytes(`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_in.key gir 2>/dev/null`).to_i,      
           :out=> getBytes(`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_out.key gir 2>/dev/null`).to_i}}
         end
+        #The first day of the billing cycle.
+        #My billing cycle rollover date is the eleventh.  If I've downloaded up to 100% of my bandwidth limit and have to stop, on the
+        #11th I can start downloading again because the 11th of every month is the first day of my new billing cycle.  So, I'd enter 11.
+        #You need to add a rolloverDay for each interface, and it must be in the for of a hash such as {:eth0=>11}.
+        def rolloverDay
+          {:eth0=>11}
+        end
       end
     end
   end
