@@ -28,8 +28,9 @@ module TCD
         #
         def getStats
           extend TCD::Common
+          {:eth0=>
           {:in=> getBytes(`ssh -i traffic_control_daemon_in.key gir 2>/dev/null`).to_i,      
-          :out=> getBytes(`ssh -i traffic_control_daemon_out.key gir 2>/dev/null`).to_i}
+          :out=> getBytes(`ssh -i traffic_control_daemon_out.key gir 2>/dev/null`).to_i}}
         end
       end
     end
