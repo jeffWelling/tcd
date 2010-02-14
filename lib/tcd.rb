@@ -33,7 +33,7 @@ module TCD
     def main
       loop do
         extend TCD::Common
-        log "The thing is using this many bandwidths 0.0"
+        log "The thing is using this many bandwidths => #{TCD::IRB.getAllProfileStats}"
         sleep 3
       end
     end
