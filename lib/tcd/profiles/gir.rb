@@ -20,12 +20,17 @@
 module TCD
   module Profiles
     module Gir
-      #Return true or false depending on if this profile should be applied.
-      def useProfile?
-        true
-      end
-      #
-      def getStats
+      class << self
+        #Return true or false depending on if this profile should be applied.
+        def useProfile?
+          true
+        end
+        #
+        def getStats
+          include TCD::Common
+          {:in=> getBytes(`ssh -i traffic_control_daemon_in.key gir 2>/dev/null`).to_i,      
+          :out=> getBytes(`ssh -i traffic_control_daemon_out.key gir 2>/dev/null`).to_i}
+        end
       end
     end
   end
