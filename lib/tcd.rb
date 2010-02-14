@@ -37,6 +37,10 @@ module TCD
         Signal.trap("USR1") do
           log "Traffic control daemon still running!"
         end
+        Signal.trap("TERM") do
+          log "Traffic control daemon terminating!"
+          exit
+        end
         extend TCD::Common
         stats=TCD::IRB.getAllProfileStats
         log "The thing is using this many bandwidths => #{stats.inspect}"
