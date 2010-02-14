@@ -33,6 +33,7 @@ module TCD
   autoload :Storage, 'lib/tcd/Storage'
   class << self
     def main
+      extend TCD::Common
       log "Traffic control daemon starting!"
       loop do
         Signal.trap("USR1") do
@@ -42,7 +43,6 @@ module TCD
           log "Traffic control daemon terminating!"
           exit
         end
-        extend TCD::Common
         stats=TCD::IRB.getAllProfileStats
         #log "Bandwidth used since last update (in bytes) => #{stats.inspect}"
         TCD::Storage.saveStats stats
