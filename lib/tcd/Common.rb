@@ -25,6 +25,10 @@ module TCD
       Syslog.notice msg
       Syslog.close
     end
+    def writeFile contents, filename, append=nil
+      FileUtils.mkdir(File.expand_path('~/.tcd/')) unless File.exist?(File.expand_path(Storage.basedir))
+      File.open( File.expand_path(filename), (append.nil? ? (File::WRONLY|File::TRUNC|File::CREAT) : ("a"))) {|f| f.write contents }
+    end
     #Retrieve bandwidth statistics from pmacct
     def retrieveData _module
       _module.getStats
