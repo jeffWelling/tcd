@@ -22,14 +22,15 @@ module TCD
     PROFILES=[]
     class << self
       def loadProfiles
-        Dir.glob(File.expand_path("lib/tcd/profiles/*")).each {|profile|
-          if profile[/\.rb\s?$/]
-            load profile
-            PROFILES<< eval( "TCD::Profiles::#{File.basename(profile, '.rb').capitalize}" )
+        Dir.glob(File.expand_path("lib/tcd/profiles/*")).each{|profile_filename|
+          if profile_filename[/\.rb\s?$/]
+            load profile_filename
+            PROFILES << eval( "TCD::Profiles::#{File.basename(profile_filename).capitalize}" )
             PROFILES.uniq!
           end
         }
       end
     end
+    loadProfiles
   end
 end
