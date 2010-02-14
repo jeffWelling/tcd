@@ -20,6 +20,13 @@
 module TCD
   module Profiles
     module Gir
+      #Return true or false depending on if this profile should be applied.
+      def useProfile?
+        true
+      end
+      #
+      def getStats
+      end
     end
   end
 end
