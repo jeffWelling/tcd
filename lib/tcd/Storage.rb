@@ -50,6 +50,13 @@ module TCD
         }
         values
       end
+      #Read path, and generate a list of stats from it.
+      def processStat path
+        result=[]
+        File.basename(path).include?('in') ? (result[0]=:in) : (result[0]=:out)
+        result[1]=readOneStat(path)
+        return result
+      end
     end
   end
 end
