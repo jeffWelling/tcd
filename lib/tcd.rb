@@ -32,6 +32,7 @@ module TCD
   autoload :Profiles, 'lib/tcd/Profiles'
   autoload :IRB, 'lib/tcd/irb'
   autoload :Storage, 'lib/tcd/Storage'
+  autoload :Version, 'lib/tcd/Version'
   class << self
     def main
       extend TCD::Common
