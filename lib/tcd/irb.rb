@@ -29,6 +29,10 @@ module TCD
         }
         result
       end
+      #Return the total number of bytes used this billing cycle
+      def usageThisBillingPer profile_name, interface
+        
+      end
     end
   end
 end
