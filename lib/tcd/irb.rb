@@ -31,7 +31,12 @@ module TCD
       end
       #Return the total number of bytes used this billing cycle
       def usageThisBillingPer profile_name, interface
-        
+        stats= TCD::Storage.readStats(profile_name, interface) {|path| TCD::Profiles.inCurrentCycle(profile_name, interface, path) }
+        bytes_in=0
+        bytes_out=0
+        stats[:in].each {|size, date| bytes_in+=size}
+        stats[:out].each{|size, date| bytes_out+=size}
+        bytes_in+bytes_out
       end
     end
   end
