@@ -32,7 +32,7 @@ module TCD
       end
       #Return true if path should be included in tallying the current billing cycle.
       def inCurrentCycle(profile_name, interface, path)
-        rollover_day= eval("TCD::Profiles::#{profile_name}.rolloverDay")[interface]
+        rollover_day= eval("TCD::Profiles::#{profile_name}.rolloverDay")[interface.to_sym]
         path_date= getDateFromPath(path)
         now=DateTime.now
         first_day_of_billing_cycle=lastRolloverDate( rollover_day )
