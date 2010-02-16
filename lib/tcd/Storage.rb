@@ -39,10 +39,11 @@ module TCD
       #Read stats from ~/.tcd/stats for profile_name and interface.  The block passed each path
       #in succession and must return true if that path should be read and included in the tally
       #returned to the user.
-      def readStats profile_name, interace, &blk
+      def readStats profile_name, interface, &blk
         values={:in=>[],:out=>[]}
-        Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface}/")).each {|path|
-          result=processStat(path) if inCurrentCycle(path)
+        Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface}/**/*")).each {|path|
+          next unless path[/(\d){4}-(\d){1,2}-(\d){1,2}\/(\d){1,2}-(\d){1,2}-(\d){1,2}_(in|out|aggr)\.txt/]
+          result=processStat(path) if yield(path)
           unless result.nil?
             result[0]==:in ? values[:in] << result[1] : values[:out] << result[1]
           end
