@@ -26,6 +26,8 @@ autoload :Syslog, 'syslog'
 autoload :IfconfigWrapper, 'ruby-ifconfig/lib/ifconfig.rb'
 autoload :FileUtils, 'fileutils'
 autoload :DateTime, 'date'
+autoload :OptionParser, 'optparse'
+autoload :OpenStruct, 'ostruct'
 
 module TCD
   autoload :Common, 'lib/tcd/Common'
@@ -33,6 +35,8 @@ module TCD
   autoload :IRB, 'lib/tcd/irb'
   autoload :Storage, 'lib/tcd/Storage'
   autoload :Version, 'lib/tcd/Version'
+  autoload :CLI, 'lib/tcd/CLI'
+  autoload :Command, 'lib/tcd/Command'
   class << self
     def main
       extend TCD::Common
