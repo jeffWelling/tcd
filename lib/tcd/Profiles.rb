@@ -38,6 +38,14 @@ module TCD
         first_day_of_billing_cycle=lastRolloverDate( rollover_day )
         path_date > first_day_of_billing_cycle
       end
+      def getDateFromPath path
+        DateTime.parse(File.basename(File.dirname(path)) + ' ' + File.basename(path, '.txt')[/^[^_]+/].gsub('-',':')) rescue puts(
+        File.basename(File.dirname(path)) + ' ' + File.basename(path, '.txt')[/^[^_]+/].gsub('-',':'))
+      end
+      def lastRolloverDate rollover_day
+        minus_one= DateTime.now.day > rollover_day ? 0 : 1
+        DateTime.civil( DateTime.now.year, DateTime.now.month.-(minus_one), rollover_day)
+      end
     end
     loadProfiles
   end
