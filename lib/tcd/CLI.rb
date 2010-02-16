@@ -30,6 +30,7 @@ module TCD
     
     def initialize(args)
       @args= args.dup
+      @options= OpenStruct.new
       if args.empty? 
         puts "Your supposed to actually tell me to do something,  gawsh napoleon..\nTry the 'help' flag.\n\n"
         exit 1
@@ -37,7 +38,7 @@ module TCD
       @action= args.shift
       #Combine both initialize, and parse_options! methods from ticgit
     end
-    attr_reader :action, :args
+    attr_reader :action, :args, :options
 
     def execute! 
       if mod= Command.get(action)
