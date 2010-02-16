@@ -28,6 +28,8 @@ module TCD
       commands.each{|cmd| COMMANDS[cmd]= mod_name}
     end
   
+    register 'BandwidthMeter', 'Reports on your bandwidth usage for this billing cycle', 'bwmeter', 'bandwidthmeter', 'meter'
+
     def self.get(command)
       if mod_name= COMMANDS[command]
         const_get(mod_name)
