@@ -25,6 +25,7 @@ end
 autoload :Syslog, 'syslog'
 autoload :IfconfigWrapper, 'ruby-ifconfig/lib/ifconfig.rb'
 autoload :FileUtils, 'fileutils'
+autoload :DateTime, 'date'
 
 module TCD
   autoload :Common, 'lib/tcd/Common'
