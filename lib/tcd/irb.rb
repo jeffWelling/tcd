@@ -38,6 +38,22 @@ module TCD
         stats[:out].each{|size, date| bytes_out+=size}
         bytes_in+bytes_out
       end
+      #Aggregate stats for profile_name, optionally restricted to only stats for interface
+      def aggregate profile_name, interface=false
+        extend TCD::Common
+        Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface ? interface : '*'}/*")).each {|path|
+          next unless needsAggregating(path)
+          day= getDateFromPath(path)
+          interface= File.basename(File.dirname(path))
+          stats= readStats(profile_name, interface) {|p| inDay(day,p) }
+          in_sum= out_sum= 0
+          stats[:in].each {|size, date| in_sum+=size }
+          stats[:out].each {|size, date| out_sum+=size }
+          stats[:in]= [in_sum, :sum] + stats[:in]
+          stats[:out]=[out_sum,:sum] + stats[:out]
+          writeFile YAML.dump(stats), '00-00-00_aggr.txt', path
+        }
+      end
     end
   end
 end
