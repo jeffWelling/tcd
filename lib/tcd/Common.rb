@@ -42,10 +42,6 @@ module TCD
       end
       read_so_far
     end
-    #Retrieve bandwidth statistics from pmacct
-    def retrieveData _module
-      _module.getStats
-    end
     #Return an array containing IP address => subnet mask pairs attached to the interface specified
     #An interface may have more than one IP bound to it.
     def getIPs interface
