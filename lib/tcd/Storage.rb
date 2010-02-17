@@ -67,7 +67,7 @@ module TCD
         extend TCD::Common
         time=File.basename(path, '.txt')[/^[^_]+/]
         date=File.basename( File.dirname( path ))
-        [readFile(path)[0].to_i, DateTime.parse(date + '_' + time).to_s]
+        [readFile(path)[0].to_i, DateTime.parse(date + '_' + time.gsub('-',':')).to_s]
       end
       #Read an aggregated stat file, containing a combination of integers to timestamps.
       #The integers being the number of bytes transferred at that timestamp.
