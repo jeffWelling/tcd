@@ -42,6 +42,9 @@ module TCD
         DateTime.parse(File.basename(File.dirname(path)) + ' ' + File.basename(path, '.txt')[/^[^_]+/].gsub('-',':')) rescue puts(
         File.basename(File.dirname(path)) + ' ' + File.basename(path, '.txt')[/^[^_]+/].gsub('-',':'))
       end
+      def getDateFromPath path
+        DateTime.parse(File.basename(File.dirname(path)))
+      end
       def lastRolloverDate rollover_day
         minus_one= DateTime.now.day > rollover_day ? 0 : 1
         DateTime.civil( DateTime.now.year, DateTime.now.month.-(minus_one), rollover_day)
