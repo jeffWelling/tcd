@@ -49,6 +49,9 @@ module TCD
         minus_one= DateTime.now.day > rollover_day ? 0 : 1
         DateTime.civil( DateTime.now.year, DateTime.now.month.-(minus_one), rollover_day)
       end
+      #Return true only if path points to a dir with stats that need to be aggregated
+      def needsAggregating path
+      end
     end
     loadProfiles
   end
