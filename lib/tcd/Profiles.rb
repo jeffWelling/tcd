@@ -56,7 +56,8 @@ module TCD
         return false unless path[/(\d){4}-(\d){2}-(\d){2}$/] and
           File.directory?(path) and !isToday(path) and
         Dir.glob(path + '/*').each {|stat_file|
-          return false unless stat_file[STAT_FILE_REGEX]
+          return false unless stat_file[STAT_FILE_REGEX] and
+            !stat_file[/aggr\.txt$/]
         }.length > 1
  
         true
