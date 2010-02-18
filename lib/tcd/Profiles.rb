@@ -51,7 +51,17 @@ module TCD
       end
       #Return true only if path points to a dir with stats that need to be aggregated
       def needsAggregating path
+        #Note, we are expecting to be passed a path from Dir.glob(".../.tcd/stats/#{p_name}/*/*"), so it should not
+        #have a trailing slash.
+        return false unless path[/(\d){4}-(\d){2}-(\d){2}$/] and
+          File.directory?(path) and !isToday(path) and
+        Dir.glob(path + '/*').each {|stat_file|
+          return false unless stat_file[STAT_FILE_REGEX]
+        }.length > 1
+ 
+        true
       end
+      
     end
     loadProfiles
   end
