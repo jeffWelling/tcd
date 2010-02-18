@@ -61,7 +61,11 @@ module TCD
  
         true
       end
-      
+      #return true if path's date is today's date
+      def isToday(path)
+        date= Storage.getDateTimeFromPath(path)
+        date.day == DateTime.now.day
+      end
     end
     loadProfiles
   end
