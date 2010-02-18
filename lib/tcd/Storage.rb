@@ -47,7 +47,7 @@ module TCD
       def readStatsFromDisk profile_name, interface, &blk
         values={:in=>[],:out=>[]}
         Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface}/**/*")).each {|path|
-          next unless path[/(\d){4}-(\d){1,2}-(\d){1,2}\/(\d){1,2}-(\d){1,2}-(\d){1,2}_(in|out|aggr)\.txt/]
+          next unless path[STAT_FILE_REGEX]
           result=processStat(path) if yield(path)
           unless result.nil?
             result[0]==:in ? values[:in] << result[1] : values[:out] << result[1]

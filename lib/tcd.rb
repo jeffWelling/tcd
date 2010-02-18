@@ -30,6 +30,7 @@ autoload :OptionParser, 'optparse'
 autoload :OpenStruct, 'ostruct'
 
 module TCD
+  STAT_FILE_REGEX=/(\d){4}-(\d){1,2}-(\d){1,2}\/(\d){1,2}-(\d){1,2}-(\d){1,2}_(in|out|aggr)\.txt/
   autoload :Common, 'lib/tcd/Common'
   autoload :Profiles, 'lib/tcd/Profiles'
   autoload :IRB, 'lib/tcd/irb'
