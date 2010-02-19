@@ -43,7 +43,7 @@ module TCD
         File.basename(File.dirname(path)) + ' ' + File.basename(path, '.txt')[/^[^_]+/].gsub('-',':'))
       end
       def getDateFromPath path
-        DateTime.parse(File.basename(File.dirname(path)))
+        DateTime.parse(File.basename(File.dirname(path))) rescue DateTime.parse(File.basename(path))
       end
       def lastRolloverDate rollover_day
         minus_one= DateTime.now.day > rollover_day ? 0 : 1
