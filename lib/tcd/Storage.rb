@@ -76,6 +76,15 @@ module TCD
         date=File.basename( File.dirname( path ))
         DateTime.parse(date + '_' + time.gsub('-',':'))
       end
+      def postAggDeletion path
+        puts path
+        count=0
+        extend TCD::Common
+        Dir.glob(path+ '/*').each {|p|
+          (File.delete(p) and count+=1) if p[STAT_FILE_REGEX] and p[/00-00-00_aggr\.txt$/].nil?
+        }
+        count
+      end
     end
   end
 end
