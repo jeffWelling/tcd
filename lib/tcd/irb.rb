@@ -41,18 +41,22 @@ module TCD
       #Aggregate stats for profile_name, optionally restricted to only stats for interface
       def aggregate profile_name, interface=false
         extend TCD::Common
+        count=0
         Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface ? interface : '*'}/*")).each {|path|
-          next unless needsAggregating(path)
-          day= getDateFromPath(path)
+          next unless TCD::Profiles.needsAggregating(path)
+          day= TCD::Profiles.getDateFromPath(path)
           interface= File.basename(File.dirname(path))
-          stats= readStats(profile_name, interface) {|p| inDay(day,p) }
+          stats= TCD::Storage.readStats(profile_name, interface) {|p| TCD::Profiles.isDay(day,p) }
           in_sum= out_sum= 0
           stats[:in].each {|size, date| in_sum+=size }
           stats[:out].each {|size, date| out_sum+=size }
           stats[:in]= [in_sum, :sum] + stats[:in]
           stats[:out]=[out_sum,:sum] + stats[:out]
-          writeFile YAML.dump(stats), '00-00-00_aggr.txt', path
+          writeFile YAML.dump(stats), '00-00-00_aggr.txt', path+'/'
+          TCD::Storage.postAggDeletion( path )
+          count+=1
         }
+        count
       end
     end
   end
