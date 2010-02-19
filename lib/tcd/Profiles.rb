@@ -69,6 +69,11 @@ module TCD
         date.day == now.day and date.year == now.year and
           date.month == now.month
       end
+      def isDay day, path
+        path_date= Storage.getDateTimeFromPath(path) rescue getDateFromPath(path)
+        path_date.year==day.year and path_date.month==day.month and
+          path_date.day==day.day
+      end
     end
     loadProfiles
   end
