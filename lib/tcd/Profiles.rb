@@ -53,12 +53,12 @@ module TCD
       def needsAggregating path
         #Note, we are expecting to be passed a path from Dir.glob(".../.tcd/stats/#{p_name}/*/*"), so it should not
         #have a trailing slash.
-        return false unless path[/(\d){4}-(\d){2}-(\d){2}$/] and
+        return false unless path[/(\d){4}-(\d){1,2}-(\d){1,2}$/] and
           File.directory?(path) and !isToday(path) and
-        Dir.glob(path + '/*').each {|stat_file|
+          Dir.glob(path + '/*').each {|stat_file|
           return false unless stat_file[STAT_FILE_REGEX] and
             !stat_file[/aggr\.txt$/]
-        }.length > 1
+          }.length > 1
  
         true
       end
