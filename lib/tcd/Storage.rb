@@ -65,7 +65,7 @@ module TCD
       #Read a stat file containing one integer, the number of bytes transfered at that time.
       def readOneStat path
         extend TCD::Common
-        [readFile(path)[0].to_i, getDateTimeFromPath.to_s]
+        [readFile(path)[0].to_i, getDateTimeFromPath(path).to_s]
       end
       #Read an aggregated stat file, containing a combination of integers to timestamps.
       #The integers being the number of bytes transferred at that timestamp.
