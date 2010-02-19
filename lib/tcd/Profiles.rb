@@ -64,7 +64,7 @@ module TCD
       end
       #return true if path's date is today's date
       def isToday(path)
-        date= Storage.getDateTimeFromPath(path)
+        date= Storage.getDateTimeFromPath(path) rescue getDateFromPath(path)
         now= DateTime.now
         date.day == now.day and date.year == now.year and
           date.month == now.month
