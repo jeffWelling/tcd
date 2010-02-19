@@ -28,6 +28,7 @@ autoload :FileUtils, 'fileutils'
 autoload :DateTime, 'date'
 autoload :OptionParser, 'optparse'
 autoload :OpenStruct, 'ostruct'
+autoload :YAML, 'yaml'
 
 module TCD
   STAT_FILE_REGEX=/(\d){4}-(\d){1,2}-(\d){1,2}\/(\d){1,2}-(\d){1,2}-(\d){1,2}_(in|out|aggr)\.txt/
