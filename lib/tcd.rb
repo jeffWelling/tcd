@@ -55,6 +55,11 @@ module TCD
         stats=TCD::IRB.getAllProfileStats
         #log "Bandwidth used since last update (in bytes) => #{stats.inspect}"
         TCD::Storage.saveStats stats
+        begin
+          TCD::IRB.aggregateAll
+        rescue
+          log "There was an error when aggregateAll was called!"
+        end
         sleep 60
       end
     end
