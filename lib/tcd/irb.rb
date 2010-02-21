@@ -38,6 +38,11 @@ module TCD
         stats[:out].each{|size, date| bytes_out+=size}
         bytes_in+bytes_out
       end
+      def aggregateAll
+        PROFILES.each {|profile|
+          aggregate profile.to_s[MODULE_NAME_REGEX]
+        }
+      end
       #Aggregate stats for profile_name, optionally restricted to only stats for interface
       def aggregate profile_name, interface=false
         extend TCD::Common
