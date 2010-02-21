@@ -7,6 +7,8 @@ more important than others (voip over ssh, over gaming, over http
 and file transfers, etc.), and tweaks the settings of "tcng":http://tcng.sourceforge.net/ or "tc":http://linux.die.net/man/8/tc 
 to guarantee the service levels desired, on the fly.
 
+h4. Current Capabilities
+
 Currently, tcd collects statistics and stores them to keep track of and report back 
 to the user how much bandwidth has been used within their billing cycle.  
 Configuration of tcd is done via profiles, which are located in the 
