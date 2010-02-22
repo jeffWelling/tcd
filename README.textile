@@ -20,17 +20,9 @@ h4. Configuration (Profiles)
 
 A profile consists of a couple of methods,
 
-@module TCD@
-@  module Profiles@
-@    module Gir@
-@      class << self@
-@        useProfile()@
-@        getStats()@
-@        rolloverDay()@
-@      end@
-@    end@
-@  end@
-@end@
+@useProfile()@
+@getStats()@
+@rolloverDay()@
 
 **useProfile()** must return true if this profile should be polled on the next 
 iteration of the main() loop.
