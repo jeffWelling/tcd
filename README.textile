@@ -51,7 +51,7 @@ For example, if the interface name is eth0, and the first day of your biling cyc
 is the 11th, then it would look like
 
 @{ :eth0 => 11,@
-@  :INTERFACE => DAY}@
+@:INTERFACE => DAY}@
 
 There we also have an example of multiple interfaces, simply add another element to 
 the hash.
