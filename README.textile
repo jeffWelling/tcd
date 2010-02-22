@@ -110,6 +110,10 @@ on pmacct configurations, Google is your friend.
 
 
 
+
+
+h4. Installation
+
 After you've decided on a way of collecting statistics (or implemented pmacct and 
 the examples above) it's time to pull the code;
 
