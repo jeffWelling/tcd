@@ -25,11 +25,10 @@ load 'TestLibrary.rb'
 include TestLibrary
 
 describe Profiles do
-  it "loads all profiles"
-  it "returns true if path should be included in tallying this billing cycle" do
+  before(:each) do
     module TCD
       module Profiles
-        module Gir
+        module TestProfile
           class << self
             def useProfile?
               true
@@ -44,6 +43,10 @@ describe Profiles do
         end
       end
     end
+  end
+  it "loads all profiles"
+  it "returns true if path should be included in tallying this billing cycle" do
+    
   end
   it "extracts the date from the path"
   it "given rollover_day, returns DateTime object representing start of this billing cycle"
