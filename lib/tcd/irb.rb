@@ -55,8 +55,8 @@ module TCD
           in_sum= out_sum= 0
           stats[:in].each {|size, date| in_sum+=size }
           stats[:out].each {|size, date| out_sum+=size }
-          stats[:in]= [in_sum, :sum] + stats[:in]
-          stats[:out]=[out_sum,:sum] + stats[:out]
+          stats[:in]= [[in_sum, :sum]] + stats[:in]
+          stats[:out]=[[out_sum,:sum]] + stats[:out]
           writeFile YAML.dump(stats), '00-00-00_aggr.txt', path+'/'
           TCD::Storage.postAggDeletion( path )
           count+=1
