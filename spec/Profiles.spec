@@ -21,10 +21,30 @@ $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 
 load 'lib/tcd.rb'
 include TCD
+load 'TestLibrary.rb'
+include TestLibrary
 
 describe Profiles do
   it "loads all profiles"
-  it "returns true if path should be included in tallying this billing cycle"
+  it "returns true if path should be included in tallying this billing cycle" do
+    module TCD
+      module Profiles
+        module Gir
+          class << self
+            def useProfile?
+              true
+            end
+            def getStats
+              {:eth0=> {:in=> rand(200), :out=> rand(200)}}
+            end
+            def rolloverDay
+              {:eth0=> 10}
+            end
+          end
+        end
+      end
+    end
+  end
   it "extracts the date from the path"
   it "given rollover_day, returns DateTime object representing start of this billing cycle"
 end
