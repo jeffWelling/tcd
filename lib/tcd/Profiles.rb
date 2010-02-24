@@ -36,7 +36,7 @@ module TCD
         path_date= getDateTimeFromPath(path)
         now=DateTime.now
         first_day_of_billing_cycle=lastRolloverDate( rollover_day )
-        path_date > first_day_of_billing_cycle
+        path_date >= first_day_of_billing_cycle
       end
       def getDateTimeFromPath path
         DateTime.parse(File.basename(File.dirname(path)) + ' ' + File.basename(path, '.txt')[/^[^_]+/].gsub('-',':')) rescue puts(
