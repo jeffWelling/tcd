@@ -23,6 +23,7 @@ A profile consists of a couple of methods,
 @useProfile()@
 @getStats()@
 @rolloverDay()@
+@maxCapacity()@
 
 **useProfile()** must return true if this profile should be polled on the next 
 iteration of the main() loop.
@@ -55,6 +56,12 @@ is the 11th, then it would look like
 
 There we also have an example of multiple interfaces, simply add another element to 
 the hash.
+
+**maxCapacity()** must return a hash similar to that of **rolloverDay()** except that DAY
+becomes the number of bytes that may traverse an interface before it reaches 100% capacity.
+So, for a connection with a 60GB capacity limit, this would look like
+
+@{ :eth0 => 64424509440  }@
 
 
 h4. Configuration (Ways of **getStats()**-ing)
