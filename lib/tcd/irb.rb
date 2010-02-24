@@ -69,6 +69,17 @@ module TCD
         }
         count
       end
+      #For every profile, for every interface, calculate bandwidth usage in percentages
+      #and run associated triggers
+      def runTriggers
+        PROFILES.each {|m|
+          mod=m.to_s[MODULE_NAME_REGEX]
+          TCD::Profiles.getInterfaces(mod).each {|interface|
+            usage= percentOfCapacity mod, interface
+            TCD::Triggers.update( mod, interface, usage )
+          }
+        }
+      end
     end
   end
 end
