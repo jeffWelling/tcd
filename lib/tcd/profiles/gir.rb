@@ -40,6 +40,12 @@ module TCD
         def rolloverDay
           {:eth0=>11}
         end
+        #Must return a hash, one symbol-key per interface, pointing to the number of bytes an interface
+        #takes to reach 100% capacity.
+        def maxCapacity
+          #60GB => Bytes == 64 424 509 440
+          {:eth0=>64424509440}
+        end
         def getBytes src_str
           src_str.split("\n")[1].split(' ')[2].strip
         end
