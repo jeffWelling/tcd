@@ -75,6 +75,11 @@ module TCD
         path_date.year==date.year and path_date.month==date.month and
           path_date.day==date.day
       end
+      def getInterfaces profile_name
+        interfaces=[]
+        eval("TCD::Profiles::#{profile_name.to_s}").rolloverDay.each_key {|k| interfaces << k }
+        interfaces
+      end
     end
     loadProfiles
   end
