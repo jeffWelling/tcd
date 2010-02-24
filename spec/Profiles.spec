@@ -46,7 +46,18 @@ describe Profiles do
   end
   it "loads all profiles"
   it "returns true if path should be included in tallying this billing cycle" do
-    
+    date= DateTime.civil( DateTime.now.year, 
+      DateTime.now.day < TCD::Profiles::TestProfile.rolloverDay[:eth0] ? (DateTime.now.month - 1) : (DateTime.now.month) ,
+      TCD::Profiles::TestProfile.rolloverDay[:eth0])
+    path=makePathWithDate( date, :in )
+    TCD::Profiles.inCurrentCycle( :TestProfile, :eth0, path ).should == true
+
+
+    date= DateTime.civil( DateTime.now.year, 
+      DateTime.now.day < TCD::Profiles::TestProfile.rolloverDay[:eth0] ? (DateTime.now.month - 1) : (DateTime.now.month) ,
+      TCD::Profiles::TestProfile.rolloverDay[:eth0] - 1)
+    path=makePathWithDate( date, :in )
+    TCD::Profiles.inCurrentCycle( :TestProfile, :eth0, path).should == false
   end
   it "extracts the date from the path"
   it "given rollover_day, returns DateTime object representing start of this billing cycle"
