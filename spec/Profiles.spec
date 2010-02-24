@@ -37,7 +37,7 @@ describe Profiles do
               {:eth0=> {:in=> rand(200), :out=> rand(200)}}
             end
             def rolloverDay
-              {:eth0=> 10}
+              {:eth0=> 11}
             end
           end
         end
