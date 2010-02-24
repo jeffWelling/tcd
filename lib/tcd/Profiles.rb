@@ -81,6 +81,10 @@ module TCD
         eval("TCD::Profiles::#{profile_name.to_s}").rolloverDay.each_key {|k| interfaces << k.to_sym }
         interfaces
       end
+      #Return a string representing the current billing cycle, such as
+      # '20100211-20100210'
+      def billingCycle profile_name
+      end
     end
     loadProfiles
   end
