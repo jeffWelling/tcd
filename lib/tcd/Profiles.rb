@@ -46,7 +46,7 @@ module TCD
         DateTime.parse(File.basename(File.dirname(path))) rescue DateTime.parse(File.basename(path))
       end
       def lastRolloverDate rollover_day
-        minus_one= DateTime.now.day > rollover_day ? 0 : 1
+        minus_one= ((DateTime.now.day >= rollover_day) ? 0 : 1)
         DateTime.civil( DateTime.now.year, DateTime.now.month.-(minus_one), rollover_day)
       end
       #Return true only if path points to a dir with stats that need to be aggregated
