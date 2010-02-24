@@ -40,6 +40,7 @@ module TCD
   autoload :Version, 'lib/tcd/Version'
   autoload :CLI, 'lib/tcd/CLI'
   autoload :Command, 'lib/tcd/Command'
+  autoload :Triggers, 'lib/tcd/Triggers'
   class << self
     def main
       extend TCD::Common
