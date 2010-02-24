@@ -79,5 +79,10 @@ describe Profiles do
     date_from_path.day.should==20
   end
   it "given rollover_day, returns DateTime object representing start of this billing cycle" do
+    rollover_day= TCD::Profiles.lastRolloverDate( DateTime.now.day )
+    #FIXME these will go all foobar around the end of the month, and the end of the year.
+    TCD::Profiles.lastRolloverDate( DateTime.now.day - 1 ).month.should== DateTime.now.month
+    TCD::Profiles.lastRolloverDate( DateTime.now.day ).month.should== DateTime.now.month
+    TCD::Profiles.lastRolloverDate( DateTime.now.day + 1 ).month.should== DateTime.now.month - 1
   end
 end
