@@ -59,6 +59,25 @@ describe Profiles do
     path=makePathWithDate( date, :in )
     TCD::Profiles.inCurrentCycle( :TestProfile, :eth0, path).should == false
   end
-  it "extracts the date from the path"
-  it "given rollover_day, returns DateTime object representing start of this billing cycle"
+  it "extracts the datetime from the path" do
+    date= DateTime.civil( 2010, 4, 20, 4, 20, 4)
+    path=makePathWithDate( date, :in )
+    date_from_path=TCD::Profiles.getDateTimeFromPath(path)
+    date_from_path.year.should==2010
+    date_from_path.month.should==4
+    date_from_path.day.should==20
+    date_from_path.hour.should==4
+    date_from_path.min.should==20
+    date_from_path.sec.should==4
+  end
+  it "extracts the date from the path" do
+    date= DateTime.civil( 2010, 4, 20)
+    path=makePathWithDate( date, :in )
+    date_from_path=TCD::Profiles.getDateFromPath(path)
+    date_from_path.year.should==2010
+    date_from_path.month.should==4
+    date_from_path.day.should==20
+  end
+  it "given rollover_day, returns DateTime object representing start of this billing cycle" do
+  end
 end
