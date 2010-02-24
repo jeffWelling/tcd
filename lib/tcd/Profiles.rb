@@ -75,9 +75,10 @@ module TCD
         path_date.year==date.year and path_date.month==date.month and
           path_date.day==date.day
       end
+      #Return an array of all interfaces in a profile
       def getInterfaces profile_name
         interfaces=[]
-        eval("TCD::Profiles::#{profile_name.to_s}").rolloverDay.each_key {|k| interfaces << k }
+        eval("TCD::Profiles::#{profile_name.to_s}").rolloverDay.each_key {|k| interfaces << k.to_sym }
         interfaces
       end
     end
