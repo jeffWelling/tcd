@@ -70,6 +70,8 @@ module TCD
       #Read an aggregated stat file, containing a combination of integers to timestamps.
       #The integers being the number of bytes transferred at that timestamp.
       def readAggrStats path
+        extend TCD::Common
+        YAML.load readFile(path).join
       end
       def getDateTimeFromPath path 
         time=File.basename(path, '.txt')[/^[^_]+/]
