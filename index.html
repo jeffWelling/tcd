@@ -3,6 +3,7 @@
 
 
 
+
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>jeffWelling/tcd @ GitHub</title>
 
 	
@@ -87,10 +88,45 @@ hr {
     
 <h2>Whats TCD?<br />
 </h2>
-TCD stands for Traffic Control Daemon.&nbsp; The end goal is to
-implement fine-grained traffic control by tweaking quality of service
-prioritization on the fly based on live traffic statistics.&nbsp; More
-info.<br />
+TCD stands for Traffic Control Daemon.&nbsp; TCD collects statistics
+from your internet gateway(s) and will help you avoid bandwidth overage
+charges from your ISP using user-defined rules.&nbsp; Rules are
+composed of conditionals, and commands that are executed when those
+conditions are met.&nbsp; This can help people with a single internet
+connection as well as multi-homed users.&nbsp; Example uses include...<br />
+<br />
+<div style="margin-left: 40px;">You have one internet connection and
+are allowed 60 Gigabytes of traffic per month.&nbsp; You download a lot
+of content, but aren't interested in upgrading your internet connection
+to accomodate the only occasional overage.<br />
+To help make sure you don't go over your 60 Gigabyte allotment, you can use TCD.<br />
+For this, you could configure TCD such that at 98% usage (a little
+wiggle room is always nice), a command is run to throttle your internet
+connection down to a trickle.&nbsp; By also inputting the date of your
+billing cycle rollover, TCD can then run another command when your
+billing cycle rolls over to un-throttle your connection to give you
+full speeds again.<br />
+</div>
+<br />
+And...<br />
+<div style="margin-left: 40px;">You have two internet
+connections.&nbsp; Connection A allows you 80 Gigabytes per month and
+connection B allows you 120 Gigabytes.&nbsp; Your regular monthly
+traffic easily reaches 100 Gigabytes, more than connection A allows,
+but because connection B is less reliable or has higher latency you
+prefer to use connection A whenever possible.<br />
+You could use TCD to monitor both connections, giving it the max capacity, rollover date, and some rules.&nbsp; <br />
+Rules so that when connection A reaches 98% capacity, connection B
+becomes the new default gateway, and so that when connection A rolls
+over it becomes the default gateway again.&nbsp; And if going over your
+usage on connection B is also a concern you can add a rule so that when
+connection B's usage reaches 98% a command is run to throttle the
+connection down to a trickle, and another to undo the throttling when
+connection B rolls over.<br />
+</div>
+<br />
+<a href="more_info.html">More
+info.</a><br />
 <br />
 <h2>Install</h2>
 
