@@ -34,7 +34,7 @@ module TCD
   STAT_FILE_REGEX=/(\d){4}-(\d){1,2}-(\d){1,2}\/(\d){1,2}-(\d){1,2}-(\d){1,2}_(in|out|aggr)\.txt/
   MODULE_NAME_REGEX=/[^(::)]+$/
   libdir = 'lib/tcd/'
-  Dir.glob(libdir + "*.rb").each {|lib| libname = File.basename lib, '.rb' ; libfile = libdir + libname ; lib = lib.to_sym ; p libname ; autoload libname, libfile }
+  Dir.glob(libdir + "*.rb").each {|lib| libname = File.basename lib, '.rb' ; libfile = libdir + libname ; lib = lib.to_sym ; autoload libname, libfile }
   class << self
     def main
       extend TCD::Common
