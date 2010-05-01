@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
 
+
   
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>jeffWelling/tcd @ GitHub</title>
   
@@ -86,13 +87,16 @@ the gateway machine(s) that you want to monitor and control.<br />
 TCDs configuration is done with profiles, and with rules, in
 lib/tcd/profiles/ and lib/tcd/rules/ directories respectively.&nbsp;
 Profiles define, in <a href="http://en.wikipedia.org/wiki/Ruby_%28programming_language%29">Ruby</a>
-syntax, define several key methods.<br />
+syntax, several key methods.<br />
 <br />
 <div style="margin-left: 40px;">useProfile?()<br />
 <div style="margin-left: 40px;">return <span style="font-weight: bold;">true
 </span>if this profile is to be used.<br />
 Use this method to control when polling is done for the interfaces in
-this profile.<br />
+this profile.&nbsp; useProfile?() is called every time the daemon polls
+for interfaces, before actually polling this profile.&nbsp; If
+useProfile?() returns true, the interface will be polled for
+statistics, otherwise it will not.<br />
 
 </div>
 getStats()<br />
@@ -106,6 +110,7 @@ out since the last call, and expects each call to zero the counters as
 well.&nbsp; This is done instead of trying to track integer
 overflow.&nbsp; Multiple interfaces are acceptable as multiple items in
 the hash following the above example.<br />
+getStats() is the method called to poll for interface statistics after useProfile?() returns true when the daemon polls.<br />
 </div>
 rolloverDay()<br />
 <div style="margin-left: 40px;">return a hash in the format of<br />
@@ -128,7 +133,19 @@ gigabytes.&nbsp; One for each interface returned in the getStats()
 return value.<br />
 
 </div>
-</div>
+</div><br />
+Rules are configured by <span style="font-weight: bold;">register</span>ing
+sets of rules, as demonstrated in examples below.&nbsp; The rules
+themselves are composed pairs of strings, the first string is the
+conditional expression that is <a href="http://en.wikipedia.org/wiki/Eval#Ruby">eval</a>'d to determine if the rule's conditions have been met. The first string must return <span style="font-weight: bold;">true</span>
+if the conditions are met and you want the second string, the payload
+expression, to be processed.&nbsp; If the conditional evaluates to
+true, then the payload expression is eval'd.<br />
+Registration involves more than just a set of rules, its based on the
+interface name you want the rule to be triggered for (or :all for any
+interface), and the percent of bandwidth that triggers running of the
+rule (or :all for the rule to be processed all the time).<br />
+<br />
 <br />
 <div class="footer"> get the source code on GitHub : <a href="http://github.com/jeffWelling/tcd">jeffWelling/tcd</a> </div>
 </div>
