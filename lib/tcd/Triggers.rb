@@ -30,7 +30,28 @@ module TCD
     class << self
       
       attr_reader :triggers
-      
+      #Register *rules under profile_name, interface, and percent.
+      #This is called by the user to register the rules they want and when they want to run them.  It
+      # should be called from the user written profile. 
+      def register profile_name, interface, percent, *rules
+        profile_name=profile_name.to_sym
+        interface=interface.to_sym
+
+        #prep @triggers if it needs it
+        @triggers.merge!( {profile_name => {}} ) unless @triggers.include?( profile_name )
+        @triggers[profile_name].merge!( {interface => {}} ) unless 
+          @triggers[profile_name].include?( interface )
+        @triggers[profile_name][interface].merge!( {percent=>[]} ) unless
+          @triggers[profile_name][interface].include?( percent )
+        
+        #Is rules just one set of rules, or is it an array of rules
+        if rules[0].class==String
+          @triggers[profile_name][interface][percent] << rules
+        else
+          rules.each {|rule| @triggers[profile_name][interface][percent] << rule }
+        end
+      end
+
       #Run any triggers associated with this percent for this interface on this profile_name
       def update profile_name, interface, percent
         @triggers.merge!( { profile_name.to_sym => {}} ) unless @triggers.has_key? profile_name.to_sym
