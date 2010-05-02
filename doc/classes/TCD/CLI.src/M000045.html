@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>execute! (TCD::CLI)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/tcd/CLI.rb, line 43</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute!</span> 
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">mod</span>= <span class="ruby-constant">Command</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">action</span>)
+        <span class="ruby-identifier">extend</span>(<span class="ruby-identifier">mod</span>)
+        
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:parser</span>)
+          <span class="ruby-identifier">option_parser</span>= <span class="ruby-constant">Command</span>.<span class="ruby-identifier">parser</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">method</span>(<span class="ruby-identifier">:parser</span>))
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">option_parser</span>= <span class="ruby-constant">Command</span>.<span class="ruby-identifier">parser</span>(<span class="ruby-identifier">action</span>)
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-identifier">option_parser</span>.<span class="ruby-identifier">parse!</span>(<span class="ruby-identifier">args</span>)
+        <span class="ruby-identifier">execute</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:execute</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-identifier">usage</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-keyword kw">and</span> <span class="ruby-operator">!</span><span class="ruby-identifier">action</span>
+          <span class="ruby-identifier">exit</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;\n\n#{action} is not a command, try the -h option to get a clue\n&quot;</span>
+          <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

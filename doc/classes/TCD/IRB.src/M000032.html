@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>aggregate (TCD::IRB)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/tcd/IRB.rb, line 53</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">aggregate</span> <span class="ruby-identifier">profile_name</span>, <span class="ruby-identifier">interface</span>=<span class="ruby-keyword kw">false</span>
+        <span class="ruby-identifier">extend</span> <span class="ruby-constant">TCD</span><span class="ruby-operator">::</span><span class="ruby-constant">Common</span>
+        <span class="ruby-identifier">count</span>=<span class="ruby-value">0</span>
+        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-node">&quot;~/.tcd/stats/#{profile_name}/#{interface ? interface : '*'}/*&quot;</span>)).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">TCD</span><span class="ruby-operator">::</span><span class="ruby-constant">Profiles</span>.<span class="ruby-identifier">needsAggregating</span>(<span class="ruby-identifier">path</span>)
+          <span class="ruby-identifier">day</span>= <span class="ruby-identifier">getDateFromPath</span>(<span class="ruby-identifier">path</span>)
+          <span class="ruby-identifier">interface</span>= <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">path</span>))
+          <span class="ruby-identifier">stats</span>= <span class="ruby-constant">TCD</span><span class="ruby-operator">::</span><span class="ruby-constant">Storage</span>.<span class="ruby-identifier">readStats</span>(<span class="ruby-identifier">profile_name</span>, <span class="ruby-identifier">interface</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-constant">TCD</span><span class="ruby-operator">::</span><span class="ruby-constant">Profiles</span>.<span class="ruby-identifier">isDay</span>(<span class="ruby-identifier">day</span>,<span class="ruby-identifier">p</span>) }
+          <span class="ruby-identifier">in_sum</span>= <span class="ruby-identifier">out_sum</span>= <span class="ruby-value">0</span>
+          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">:in</span>].<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">size</span>, <span class="ruby-identifier">date</span><span class="ruby-operator">|</span> <span class="ruby-identifier">in_sum</span><span class="ruby-operator">+=</span><span class="ruby-identifier">size</span> }
+          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">size</span>, <span class="ruby-identifier">date</span><span class="ruby-operator">|</span> <span class="ruby-identifier">out_sum</span><span class="ruby-operator">+=</span><span class="ruby-identifier">size</span> }
+          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">:in</span>]= [[<span class="ruby-identifier">in_sum</span>, <span class="ruby-identifier">:sum</span>]] <span class="ruby-operator">+</span> <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">:in</span>]
+          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">:out</span>]=[[<span class="ruby-identifier">out_sum</span>,<span class="ruby-identifier">:sum</span>]] <span class="ruby-operator">+</span> <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">:out</span>]
+          <span class="ruby-identifier">writeFile</span> <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">stats</span>), <span class="ruby-value str">'00-00-00_aggr.txt'</span>, <span class="ruby-identifier">path</span><span class="ruby-operator">+</span><span class="ruby-value str">'/'</span>
+          <span class="ruby-constant">TCD</span><span class="ruby-operator">::</span><span class="ruby-constant">Storage</span>.<span class="ruby-identifier">postAggDeletion</span>( <span class="ruby-identifier">path</span> )
+          <span class="ruby-identifier">count</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
+        }
+        <span class="ruby-identifier">count</span>
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

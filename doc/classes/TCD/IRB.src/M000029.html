@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>usageThisBillingPer (TCD::IRB)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/tcd/IRB.rb, line 33</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">usageThisBillingPer</span> <span class="ruby-identifier">profile_name</span>, <span class="ruby-identifier">interface</span>
+        <span class="ruby-identifier">stats</span>= <span class="ruby-constant">TCD</span><span class="ruby-operator">::</span><span class="ruby-constant">Storage</span>.<span class="ruby-identifier">readStats</span>(<span class="ruby-identifier">profile_name</span>, <span class="ruby-identifier">interface</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span> <span class="ruby-constant">TCD</span><span class="ruby-operator">::</span><span class="ruby-constant">Profiles</span>.<span class="ruby-identifier">inCurrentCycle</span>(<span class="ruby-identifier">profile_name</span>, <span class="ruby-identifier">interface</span>, <span class="ruby-identifier">path</span>) }
+        <span class="ruby-identifier">bytes_in</span>=<span class="ruby-value">0</span>
+        <span class="ruby-identifier">bytes_out</span>=<span class="ruby-value">0</span>
+        <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">:in</span>].<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">size</span>, <span class="ruby-identifier">date</span><span class="ruby-operator">|</span> <span class="ruby-identifier">bytes_in</span><span class="ruby-operator">+=</span><span class="ruby-identifier">size</span>}
+        <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">size</span>, <span class="ruby-identifier">date</span><span class="ruby-operator">|</span> <span class="ruby-identifier">bytes_out</span><span class="ruby-operator">+=</span><span class="ruby-identifier">size</span>}
+        <span class="ruby-identifier">bytes_in</span><span class="ruby-operator">+</span><span class="ruby-identifier">bytes_out</span>
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
