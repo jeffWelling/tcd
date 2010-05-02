@@ -69,8 +69,8 @@ module TCD
         }
         count
       end
-      #For every profile, for every interface, calculate bandwidth usage in percentages
-      #and run associated triggers
+
+      #Run all triggers scheduled to run between the last time this was called and now.
       def runTriggers
         PROFILES.each {|m|
           mod=m.to_s[MODULE_NAME_REGEX]
