@@ -19,14 +19,15 @@
 =end
 module TCD
   module Profiles
-    PROFILES=[]
+    @profiles=[]
     class << self
+      attr_accessor :profiles
       def loadProfiles
         Dir.glob(File.expand_path("~/Documents/Projects/tcd/lib/tcd/profiles/*")).each{|profile_filename|
           if profile_filename[/\.rb\s?$/]
             load profile_filename
-            PROFILES << eval( "TCD::Profiles::#{File.basename(profile_filename, '.rb').capitalize}" )
-            PROFILES.uniq!
+            @profiles << eval( "TCD::Profiles::#{File.basename(profile_filename, '.rb').capitalize}" )
+            @profiles.uniq!
           end
         }
       end

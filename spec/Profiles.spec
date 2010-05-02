@@ -53,6 +53,7 @@ describe Profiles do
     TCD::Profiles.loadProfiles
     TCD::Profiles::Testprofileone rescue failed=true
     File.delete("lib/tcd/profiles/testprofileone.rb")
+    TCD::Profiles.profiles.include?(TCD::Profiles::Testprofileone).should == true
     failed.should == false
   end
   it "returns true if path should be included in tallying this billing cycle" do
