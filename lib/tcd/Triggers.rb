@@ -59,7 +59,7 @@ module TCD
         interface=interface.to_sym
         
         @triggers[profile_name][interface][percent].each {|rules|
-          eval(rules[1]) if eval(rules[0])
+          eval(rules[1]) if eval(rules[0]).class==TrueClass
         } rescue return(false)
         true
       end
