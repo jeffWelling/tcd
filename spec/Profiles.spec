@@ -61,14 +61,14 @@ describe Profiles do
       DateTime.now.day < TCD::Profiles::TestProfile.rolloverDay[:eth0] ? (DateTime.now.month - 1) : (DateTime.now.month) ,
       TCD::Profiles::TestProfile.rolloverDay[:eth0])
     path=makePathWithDate( date, :in )
-    TCD::Profiles.inCurrentCycle( :TestProfile, :eth0, path ).should == true
+    TCD::Profiles.PathInCurrentCycle?( :TestProfile, :eth0, path ).should == true
 
 
     date= DateTime.civil( DateTime.now.year, 
       DateTime.now.day < TCD::Profiles::TestProfile.rolloverDay[:eth0] ? (DateTime.now.month - 1) : (DateTime.now.month) ,
       TCD::Profiles::TestProfile.rolloverDay[:eth0] - 1)
     path=makePathWithDate( date, :in )
-    TCD::Profiles.inCurrentCycle( :TestProfile, :eth0, path).should == false
+    TCD::Profiles.PathInCurrentCycle?( :TestProfile, :eth0, path).should == false
   end
   it "extracts the datetime from the path" do
     date= DateTime.civil( 2010, 4, 20, 4, 20, 4)
