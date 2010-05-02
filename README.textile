@@ -1,0 +1,144 @@
+h1=. tcd (traffic control daemon)
+
+=====================================================================
+tcd is a traffic control daemon which uses live monitoring of 
+traffic, combined with user specified rules for which protocols are
+more important than others (voip over ssh, over gaming, over http 
+and file transfers, etc.), and tweaks the settings of "tcng":http://tcng.sourceforge.net/ or "tc":http://linux.die.net/man/8/tc 
+to guarantee the service levels desired, on the fly.
+
+
+h4. Current Capabilities
+
+Currently, tcd collects statistics and stores them to keep track of and report back 
+to the user how much bandwidth has been used within their billing cycle.  
+Configuration of tcd is done via profiles, which are located in the 
+lib/tcd/profiles/ directory.  There should be an example profile in that directory.
+
+
+h4. Configuration (Profiles)
+
+A profile consists of a couple of methods,
+
+@useProfile()@
+@getStats()@
+@rolloverDay()@
+@maxCapacity()@
+
+**useProfile()** must return true if this profile should be polled on the next 
+iteration of the main() loop.
+
+**getStats()** must return a hash in the form of
+
+@{ :INTERFACE_NAME => {:in=>x,:out=>y}}@
+
+where INTERFACE_NAME is a symbol of the name of the interface, and x and y are 
+the number of received and transmitted bytes respectively, as intergers.  
+Executing getStats() must reset the counters - that is, if only one byte has 
+been sent and received since the last time getStats() was called, x and y 
+should both equal 1.  Not 1, plus however many bytes had traversed previously. 
+
+There are a couple of ways you can go about writing your getStats() method to 
+retrieve the information, more can be found below, and in the example in 
+lib/tcd/profiles/.
+
+**rolloverDay()** must return a hash such as
+
+@{ :INTERFACE => DAY }@
+
+where INTERFACE is an interface in that profile, and DAY is the first day of your
+billing cycle to count bandwidth from.  Day must be an interger, not a string.
+For example, if the interface name is eth0, and the first day of your biling cycle
+is the 11th, then it would look like
+
+@{ :eth0 => 11,@
+@:INTERFACE => DAY}@
+
+There we also have an example of multiple interfaces, simply add another element to 
+the hash.
+
+**maxCapacity()** must return a hash similar to that of **rolloverDay()** except that DAY
+becomes the number of bytes that may traverse an interface before it reaches 100% capacity.
+So, for a connection with a 60GB capacity limit, this would look like
+
+@{ :eth0 => 64424509440  }@
+
+
+h4. Configuration (Ways of **getStats()**-ing)
+
+Currently, I use a fairly simple, and to the best of my investigating fairly secure setup
+where I created two new ssh keys in the tcd directory, both without passphrases.  One for
+the in traffic and one for the out traffic.  Then, I copied the keys to my gateway
+machine and appended them to my authorized_keys file, but before logging out, I edited
+the lines that I'd just added to the authorized_keys file.  Where the lines began as
+
+@ssh-rsa AAAAB3N...=@
+@ssh-rsa AAAAB3N...=@
+
+I changed them to
+
+@command="/usr/bin/pmacct -s -e -p /tmp/pmacct_eth2_tcd_in.pipe" ssh-rsa AAAAB3N...=@
+@command="/usr/bin/pmacct -s -e -p /tmp/pmacct_eth2_tcd_out.pipe" ssh-rsa AAAAB3N...=@
+
+OK now lets point out some things.  This tells ssh that logging in with that key means
+that the user is allowed to login, to recieve the output of command="" executing, and
+then log out again. And nothing else.  Don't take my word for it, try it for yourself.
+If you want to be even more secure you can use from= to only allow logins from specific
+hosts.
+
+Now, I use pmacct on my gateway to collect traffic statistics, and you can see in the
+example above, I'm executing pmacct on 2 different pipes, for in and out respectively.
+How you collect and get these statistics into the **getStats()** method's output is
+left entirely up to you so you can use any method you wish.  If, however, you want to
+mimic my setup, then install pmacct on your gateway and try out this example config.
+I extracted the important lines from my own config; I'd post my config itself but it
+has several plugins configured and may be overcomplicated for the average user.
+
+__/etc/pmacct/pmacctd.eth2.conf__
+
+@daemonize: true@
+@pidfile: /var/run/pmacctd.pid@
+@syslog: daemon@
+@interface: eth2@
+@plugins: memory[tcd_in], memory[tcd_out]@
+@aggregate[tcd_in]: dst_host@
+@aggregate[tcd_out]: src_host@
+@aggregate_filter[tcd_in]: dst host 1.2.3.4@
+@aggregate_filter[tcd_out]: src host 1.2.3.4@
+@imt_path[tcd_in]: /tmp/pmacct_eth2_tcd_in.pipe@
+@imt_path[tcd_out]: /tmp/pmacct_eth2_tcd_out.pipe@
+
+First of all, notice that the interface I'm monitoring is eth2, and the filename 
+is **/etc/pmacct/pmacctd.__eth2__.conf**.  
+Pmacct will look for /etc/pmacct/pmacctd.INTERFACE.conf where INTERFACE is each 
+interface.  Also note the imt_path directives, those are the pipe locations that 
+you need to use in the authorized_keys file's command= call.  For more information
+on pmacct configurations, Google is your friend.
+
+
+
+
+
+h4. Installation
+
+After you've decided on a way of collecting statistics (or implemented pmacct and 
+the examples above) it's time to pull the code;
+
+@git clone git://github.com/jeffWelling/tcd.git@
+
+in a working directory of your choice.
+Then, 
+
+@cd tcd@
+
+or whatever you chose to override the directory name with, if you did.
+Before being able to check any statistics, you are going to need to create a 
+profile which is outlined above in **Configuration**.  After creating a profile,
+you can run
+
+@bin/tcd_collector start@
+
+and that should start the tcd_collector daemon.  This will create log files 
+in ~/.tcd/stats for statistics collection and to calculate the total bandwidth 
+used in a billing period.
+

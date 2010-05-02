@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>parser (TCD::Command::BandwidthMeter)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/tcd/commands/bandwidthmeter.rb, line 23</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parser</span>(<span class="ruby-identifier">o</span>)
+        <span class="ruby-identifier">o</span>.<span class="ruby-identifier">banner</span>= <span class="ruby-value str">&quot;Usage: tcd (bwmeter|bandwidthmeter|meter) [options] Shows the amount of bandwidth used in this billing cycle&quot;</span>
+        <span class="ruby-identifier">o</span>.<span class="ruby-identifier">on_head</span>(
+          <span class="ruby-value str">&quot;-p PROFILE_NAME&quot;</span>, <span class="ruby-value str">&quot;--profile PROFILE_NAME&quot;</span>, <span class="ruby-value str">&quot;Specify the profile name to check statistics for&quot;</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>.<span class="ruby-identifier">profile</span>= <span class="ruby-identifier">v</span>
+        }
+        <span class="ruby-identifier">o</span>.<span class="ruby-identifier">on_head</span>(
+          <span class="ruby-value str">&quot;-i INTERFACE&quot;</span>, <span class="ruby-value str">&quot;--interface INTERFACE&quot;</span>, <span class="ruby-value str">&quot;Which interface to tally bandwidth usage for&quot;</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>.<span class="ruby-identifier">interface</span>= <span class="ruby-identifier">v</span>
+        }
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

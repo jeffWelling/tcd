@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: TCD::Profiles::Gir</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">TCD::Profiles::Gir</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/tcd/profiles/gir_rb.html">
+                lib/tcd/profiles/gir.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000013">getBytes</a>&nbsp;&nbsp;
+      <a href="#M000010">getStats</a>&nbsp;&nbsp;
+      <a href="#M000012">maxCapacity</a>&nbsp;&nbsp;
+      <a href="#M000011">rolloverDay</a>&nbsp;&nbsp;
+      <a href="#M000009">useProfile?</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000013" class="method-detail">
+        <a name="M000013"></a>
+
+        <div class="method-heading">
+          <a href="Gir.src/M000013.html" target="Code" class="method-signature"
+            onclick="popupCode('Gir.src/M000013.html');return false;">
+          <span class="method-name">getBytes</span><span class="method-args">(src_str)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000010" class="method-detail">
+        <a name="M000010"></a>
+
+        <div class="method-heading">
+          <a href="Gir.src/M000010.html" target="Code" class="method-signature"
+            onclick="popupCode('Gir.src/M000010.html');return false;">
+          <span class="method-name">getStats</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000012" class="method-detail">
+        <a name="M000012"></a>
+
+        <div class="method-heading">
+          <a href="Gir.src/M000012.html" target="Code" class="method-signature"
+            onclick="popupCode('Gir.src/M000012.html');return false;">
+          <span class="method-name">maxCapacity</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Must return a hash, one symbol-key per interface, pointing to the number of
+bytes an interface takes to reach 100% capacity.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000011" class="method-detail">
+        <a name="M000011"></a>
+
+        <div class="method-heading">
+          <a href="Gir.src/M000011.html" target="Code" class="method-signature"
+            onclick="popupCode('Gir.src/M000011.html');return false;">
+          <span class="method-name">rolloverDay</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The first day of the billing cycle. My billing cycle rollover date is the
+eleventh. If I&#8216;ve downloaded up to 100% of my bandwidth limit and
+have to stop, on the 11th I can start downloading again because the 11th of
+every month is the first day of my new billing cycle. So, I&#8216;d enter
+11. You need to add a <a href="Gir.html#M000011">rolloverDay</a> for each
+interface, and it must be in the for of a hash such as {:eth0=&gt;11}.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
+
+        <div class="method-heading">
+          <a href="Gir.src/M000009.html" target="Code" class="method-signature"
+            onclick="popupCode('Gir.src/M000009.html');return false;">
+          <span class="method-name">useProfile?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Return true or false depending on if this profile should be applied.
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
