@@ -73,11 +73,6 @@ module TCD
         extend TCD::Common
         YAML.load readFile(path).join
       end
-      def getDateTimeFromPath path 
-        time=File.basename(path, '.txt')[/^[^_]+/]
-        date=File.basename( File.dirname( path ))
-        DateTime.parse(date + '_' + time.gsub('-',':'))
-      end
       def postAggDeletion path
         puts path
         count=0

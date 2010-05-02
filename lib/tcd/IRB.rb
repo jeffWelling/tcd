@@ -55,7 +55,7 @@ module TCD
         count=0
         Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface ? interface : '*'}/*")).each {|path|
           next unless TCD::Profiles.needsAggregating(path)
-          day= TCD::Profiles.getDateFromPath(path)
+          day= getDateFromPath(path)
           interface= File.basename(File.dirname(path))
           stats= TCD::Storage.readStats(profile_name, interface) {|p| TCD::Profiles.isDay(day,p) }
           in_sum= out_sum= 0

@@ -33,18 +33,12 @@ module TCD
       end
       #Return true if path should be included in tallying the current billing cycle.
       def inCurrentCycle(profile_name, interface, path)
+        extend TCD::Common
         rollover_day= eval("TCD::Profiles::#{profile_name}.rolloverDay")[interface.to_sym]
         path_date= getDateTimeFromPath(path)
         now=DateTime.now
         first_day_of_billing_cycle=lastRolloverDate( rollover_day )
         path_date >= first_day_of_billing_cycle
-      end
-      def getDateTimeFromPath path
-        DateTime.parse(File.basename(File.dirname(path)) + ' ' + File.basename(path, '.txt')[/^[^_]+/].gsub('-',':')) rescue puts(
-        File.basename(File.dirname(path)) + ' ' + File.basename(path, '.txt')[/^[^_]+/].gsub('-',':'))
-      end
-      def getDateFromPath path
-        DateTime.parse(File.basename(File.dirname(path))) rescue DateTime.parse(File.basename(path))
       end
       def lastRolloverDate rollover_day
         minus_one= ((DateTime.now.day >= rollover_day) ? 0 : 1)
@@ -65,14 +59,16 @@ module TCD
       end
       #return true if path's date is today's date
       def isToday(path)
-        date= Storage.getDateTimeFromPath(path) rescue getDateFromPath(path)
+        extend TCD::Common
+        date= getDateTimeFromPath(path) rescue getDateFromPath(path)
         now= DateTime.now
         date.day == now.day and date.year == now.year and
           date.month == now.month
       end
       #return true if date in path is the date in date
       def isDay date, path
-        path_date= Storage.getDateTimeFromPath(path) rescue getDateFromPath(path)
+        extend TCD::Common
+        path_date= getDateTimeFromPath(path) rescue getDateFromPath(path)
         path_date.year==date.year and path_date.month==date.month and
           path_date.day==date.day
       end

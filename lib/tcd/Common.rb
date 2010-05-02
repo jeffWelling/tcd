@@ -52,5 +52,13 @@ module TCD
     def getNetworks interface
       return []
     end
+    def getDateTimeFromPath path 
+      time=File.basename(path, '.txt')[/^[^_]+/]
+      date=File.basename( File.dirname( path ))
+      DateTime.parse(date + '_' + time.gsub('-',':'))
+    end
+    def getDateFromPath path
+      DateTime.parse(File.basename(File.dirname(path))) rescue DateTime.parse(File.basename(path))
+    end
   end
 end
