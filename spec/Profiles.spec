@@ -47,7 +47,14 @@ describe Profiles do
       end
     end
   end
-  it "loads all profiles"
+  it "loads profiles" do
+    File.copy("spec/testprofileone.rb", "lib/tcd/profiles/testprofileone.rb")
+    failed=false
+    TCD::Profiles.loadProfiles
+    TCD::Profiles::Testprofileone rescue failed=true
+    File.delete("lib/tcd/profiles/testprofileone.rb")
+    failed.should == false
+  end
   it "returns true if path should be included in tallying this billing cycle" do
     date= DateTime.civil( DateTime.now.year, 
       DateTime.now.day < TCD::Profiles::TestProfile.rolloverDay[:eth0] ? (DateTime.now.month - 1) : (DateTime.now.month) ,

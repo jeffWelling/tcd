@@ -17,6 +17,7 @@
     along with Traffic Control Daemon.  If not, see <http://www.gnu.org/licenses/>.
   
 =end
+require 'ftools'
 
 module TestLibrary
   def makePathWithDate date, direction, path=nil
