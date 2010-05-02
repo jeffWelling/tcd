@@ -53,16 +53,17 @@ module TCD
       end
 
       #Run any triggers associated with this percent for this interface on this profile_name
+      #Intended to be run from IRB.process_triggers
       def update profile_name, interface, percent
-        @triggers.merge!( { profile_name.to_sym => {}} ) unless @triggers.has_key? profile_name.to_sym
-        @triggers[profile_name.to_sym].merge!( { interface.to_sym => {} } ) unless @triggers.has_key? interface.to_sym
-        @triggers[profile_name.to_sym][interface.to_sym].merge!(
-          { percent => [] }) unless @triggers[profile_name.to_sym][interface.to_sym].has_key? percent
-
-        @triggers[profile_name.to_sym][interface.to_sym][percent].each {|cmd|
-          #execute cmd
-        }
+        profile_name=profile_name.to_sym
+        interface=interface.to_sym
+        
+        @triggers[profile_name][interface][percent].each {|rules|
+          eval(rules[1]) if eval(rules[0])
+        } rescue return(false)
+        true
       end
+
       #return true if cmd has already been executed on schedule in this billing period
       def alreadyDone?( profile_name, interface, cmd )
       end
