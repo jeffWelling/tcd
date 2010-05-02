@@ -64,6 +64,9 @@ module TCD
         true
       end
 
+      def log profile_name, interface, percent, rules, current_percent
+      end
+
       #return true if cmd has already been executed on schedule in this billing period
       def alreadyDone?( profile_name, interface, cmd )
       end
