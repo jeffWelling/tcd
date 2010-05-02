@@ -39,6 +39,9 @@ describe Profiles do
             def rolloverDay
               {:eth0=> 11}
             end
+            def maxCapacity
+              {:eth0=>420}
+            end
           end
         end
       end
