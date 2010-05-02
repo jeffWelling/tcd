@@ -86,13 +86,15 @@ the gateway machine(s) that you want to monitor and control.<br />
 <br />
 TCDs configuration is done with profiles, and with rules, in
 lib/tcd/profiles/ and lib/tcd/rules/ directories respectively.&nbsp;
-Profiles define, in <a href="http://en.wikipedia.org/wiki/Ruby_%28programming_language%29">Ruby</a>
+<br />
+<br />
+<big style="font-weight: bold;"><big><big>Profiles</big></big></big> define, in <a href="http://en.wikipedia.org/wiki/Ruby_%28programming_language%29">Ruby</a>
 syntax, several key methods.<br />
 <br />
 <div style="margin-left: 40px;">useProfile?()<br />
 <div style="margin-left: 40px;">return <span style="font-weight: bold;">true
-</span>if this profile is to be used.<br />
-Use this method to control when polling is done for the interfaces in
+</span>if this profile is to be used.<br />Use this method to control
+when polling is done for the interfaces in
 this profile.&nbsp; useProfile?() is called every time the daemon polls
 for interfaces, before actually polling this profile.&nbsp; If
 useProfile?() returns true, the interface will be polled for
@@ -134,7 +136,7 @@ return value.<br />
 
 </div>
 </div><br />
-Rules are configured by <span style="font-weight: bold;">register</span>ing
+<big style="font-weight: bold;"><big><big>Rules</big></big></big> are configured by <span style="font-weight: bold;">register</span>ing
 sets of rules, as demonstrated in examples below.&nbsp; The rules
 themselves are composed pairs of strings, the first string is the
 conditional expression that is <a href="http://en.wikipedia.org/wiki/Eval#Ruby">eval</a>'d to determine if the rule's conditions have been met. The first string must return <span style="font-weight: bold;">true</span>
@@ -145,7 +147,46 @@ Registration involves more than just a set of rules, its based on the
 interface name you want the rule to be triggered for (or :all for any
 interface), and the percent of bandwidth that triggers running of the
 rule (or :all for the rule to be processed all the time).<br />
+Some examples of rules and their registration;<br />
 <br />
+<div style="margin-left: 40px;">TCD::Triggers.register( :eth0, 98, ["true", "`ifdown eth0`"] )<br />
+</div>
+<div style="margin-left: 80px;">This example registers rules to run
+when eth0 reaches 98% bandwidth usage.&nbsp; The rules to register are
+'true', which of course will eval to true, and "`ifdown eth0`", which
+is intended to disable eth0.<br />
+</div>
+<br />
+<div style="margin-left: 40px;">TCD::Triggers.register( :eth0, :all, ["runWithinLast(15)", "logBandwidthUsed() &amp;&amp; hasRun()"]<br />
+</div>
+<div style="margin-left: 80px;">This example registers rules to run
+every time the daemon processes rules. This is done using :all instead
+of using an integer as the second argument.&nbsp; The rules in this
+example call the method runWithinLast(15), which the user must
+predefine, which presumably returns true if hasRun() has been executed
+within the last 15 minutes.&nbsp; The payload expression in this
+example is "logBandwidthUsed() &amp;&amp; hasRun()", which presumably
+(again the user must predefine these methods) will log your current
+bandwidth usage, and makes note that it has run with hasRun().<br />
+</div>
+<br />
+<div style="margin-left: 40px;">TCD::Triggers.register( :all, 98, ["true", "`ifdown #{interface}`"] )<br />
+<div style="margin-left: 40px;">This example shows how to register
+rules for any interface that reaches 98% bandwidth usage, but it also
+demonstrtates the use of the #{interface} expression.&nbsp; The
+#{interface} expression is actually just Ruby syntax for interpreting
+the value of&nbsp; the variable 'interface' in the string being
+evaluated.&nbsp; TCD processes the list of interfaces sequentially,
+selecting one with the first argument to register() will cause the
+trigger to only continue to be processed for that specified interface.
+Using :all for the first argument causes processing to continue up to
+the second argument for each interface storing the name of the current
+interface in the 'interface' variable.<br />
+<br />
+What this does is say any interface that reaches 98 percent usage should be disabled.<br />
+</div>
+</div>
+
 <br />
 <div class="footer"> get the source code on GitHub : <a href="http://github.com/jeffWelling/tcd">jeffWelling/tcd</a> </div>
 </div>
