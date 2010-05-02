@@ -97,5 +97,10 @@ describe Profiles do
     TCD::Profiles.lastRolloverDate( DateTime.now.day + 1 ).month.should== DateTime.now.month - 1
   end
   it "Return true only if path points to a dir with stats that need to be aggregated"
-  it "return true if path's date is today's date"
+  it "return true if path's datetime is today's date" do
+    TCD::Profiles.isToday("/foo/bar/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}/04-20-00_in.txt").should == true
+    TCD::Profiles.isToday("/foo/bar/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}/04-20-boonies_in.txt").should == true
+    TCD::Profiles.isToday("/foo/bar/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}/foo_bar.txt").should == true
+    TCD::Profiles.isToday("/foo/bar/#{DateTime.now.year}-#{DateTime.now.month + 1}-#{DateTime.now.day}/04-20-00_in.txt").should == false
+  end
 end
