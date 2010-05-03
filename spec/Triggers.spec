@@ -24,7 +24,13 @@ load 'TestLibrary.rb'
 include TestLibrary
 
 describe Triggers do
-  it "registers a set of rules"
+  it "registers a set of rules" do
+      profile=
+      
+    #rules should not yet be registered
+      
+    #rules should be registered
+  end
   it "updates triggers, running the triggers registered to run at the specified time"
   it "log that a trigger was run"
   it "get the percent that profile/interface was last triggered at"
