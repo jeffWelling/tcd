@@ -27,6 +27,7 @@ module TCD
     #     of capacity has been reached on that interface in that profile for the current billing
     #     period.
     @triggers={}
+    @trigger_log=false
     class << self
       
       attr_reader :triggers
@@ -59,12 +60,18 @@ module TCD
         interface=interface.to_sym
         
         @triggers[profile_name][interface][percent].each {|rules|
-          eval(rules[1]) if eval(rules[0]).class==TrueClass
+          (eval(rules[1]); log(profile_name,interface,percent)) if eval(rules[0]).class==TrueClass
         } rescue return(false)
         true
       end
 
-      def log profile_name, interface, percent, rules, current_percent
+      #log the percent that this trigger was run at so we know what we've missed
+      #on the next run.
+      def logTrigger profile_name, interface, percent
+        @trigger_log.merge!( profile_name=>{} ) unless @trigger_log.include?(profile_name)
+        @trigger_log[profile_name].merge!( interface=>false ) unless @trigger_log.include?(interface)
+        @trigger_log[profile_name][interface]= [DateTime.now, percent]
+        Storage.writeTriggerLog
       end
 
       #return true if cmd has already been executed on schedule in this billing period
