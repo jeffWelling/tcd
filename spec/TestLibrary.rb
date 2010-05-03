@@ -33,6 +33,8 @@ module TestLibrary
 	
   def rand_file_name
     chars = ('a'..'z').collect + ('A'..'Z').collect + ('0'..'9').collect
-    name = (rand(6) + 2).of { chars.random }.join
+    name=""
+    9.times do name << chars[ rand(chars.length) ] end
+    name
   end
 end
