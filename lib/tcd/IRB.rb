@@ -75,8 +75,14 @@ module TCD
         PROFILES.each {|m|
           mod=m.to_s[MODULE_NAME_REGEX]
           TCD::Profiles.getInterfaces(mod).each {|interface|
-            usage= percentOfCapacity mod, interface
-            TCD::Triggers.update( mod, interface, usage )
+            #For every percent point between now and last run, do
+            #   Triggers.update
+            current_usage= percentOfCapacity mod, interface
+            last_usage= Triggers.getLastRunUsage( mod, interface)
+
+            (current_usage..last_usage).each {|percent|
+              TCD::Triggers.update( mod, interface, current_usage )
+            }
           }
         }
       end
