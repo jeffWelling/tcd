@@ -31,6 +31,7 @@ module TCD
     class << self
       
       attr_reader :triggers
+      attr_accessor :trigger_log
       #Register *rules under profile_name, interface, and percent.
       #This is called by the user to register the rules they want and when they want to run them.  It
       # should be called from the user written profile. 
