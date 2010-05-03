@@ -82,14 +82,10 @@ module TCD
         profile_name=profile_name.to_sym
         interface=interface.to_sym
         @trigger_log||=Storage.readTriggerLog
-        trigger=@trigger_log[profile_name][interface] rescue return(0)
+        trigger=(@trigger_log[profile_name][interface] rescue return(0))
         rollover_day=eval("Profiles::#{profile_name.to_s.capitalize}.rolloverDay[:#{interface}]")
         Storage.writeTriggerLog
         Profiles.inCurrentCycle?( rollover_day, trigger[0] ) ? trigger[1] : 0
-      end
-
-      #return true if cmd has already been executed on schedule in this billing period
-      def alreadyDone?( profile_name, interface, cmd )
       end
     end
   end
