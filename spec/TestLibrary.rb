@@ -39,13 +39,13 @@ module TestLibrary
     name
   end
 
-  def resetRuncount
+  def self.resetRuncount
     @runcount=0
   end
-  def setRun
+  def self.setRun
     @runcount+=1
   end
-  def ran?
+  def self.ran?
     @runcount > 0
   end
 end
