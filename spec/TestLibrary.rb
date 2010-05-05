@@ -20,6 +20,7 @@
 require 'ftools'
 
 module TestLibrary
+  @runcount=0
   def makePathWithDate date, direction, path=nil
     raise unless direction==:in or direction==:out or direction==:aggr
     (path.nil? ? ("/foo/bar/delicious/weenies/") : (path) )+"#{date.year}-#{date.month}-#{date.day}/#{date.hour}-#{date.min}-#{date.sec}_#{direction.to_s}.txt"
@@ -36,5 +37,15 @@ module TestLibrary
     name=""
     9.times do name << chars[ rand(chars.length) ] end
     name
+  end
+
+  def resetRuncount
+    @runcount=0
+  end
+  def setRun
+    @runcount+=1
+  end
+  def ran?
+    @runcount > 0
   end
 end
