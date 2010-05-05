@@ -25,11 +25,28 @@ include TestLibrary
 
 describe Triggers do
   it "registers a set of rules" do
-      profile=
-      
+    profile=rand_file_name().to_sym
+    interface=:eth0
+    percent=42
+    rules=["true","setRun()"]
+    
     #rules should not yet be registered
-      
+    failed=false
+    begin
+      Triggers.triggers[profile][interface][percent]
+    rescue
+      failed=true
+    end
+    failed.should == true
     #rules should be registered
+    Triggers.register( profile, interface, percent, rules )
+    failed=false
+    begin
+      Triggers.triggers[profile][interface][percent]
+    rescue
+      failed=true
+    end
+    failed.should == false
   end
   it "updates triggers, running the triggers registered to run at the specified time"
   it "log that a trigger was run"
