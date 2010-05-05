@@ -89,7 +89,8 @@ module TCD
           {:all=>{:all=>[]}})
       end
       def writeTriggerLog
-        writeFile( Profiles.trigger_log.to_yaml, 'trigger_log.yaml' )
+        extend Common
+        writeFile( YAML.dump(Triggers.trigger_log), 'trigger_log.yaml' )
       end
     end
   end
