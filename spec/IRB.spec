@@ -55,6 +55,7 @@ describe IRB do
     end
   end
   it "runs all triggers" do
+    #We don't want to run the actual profiles, so wipe them out
     Profiles.profiles=[]
     p1= $profile.to_s+'1'
     p2= $profile.to_s+'2'
