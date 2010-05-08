@@ -40,7 +40,7 @@ describe IRB do
               true
             end
             def getStats
-              {:eth0=> {:in=> rand(200), :out=> rand(200)}}
+              {:eth0=> {:in=> 1, :out=> 1}}
             end
             def rolloverDay
               {:eth0=> 11}
