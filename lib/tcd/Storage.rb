@@ -85,7 +85,7 @@ module TCD
       #Write the trigger log to disk
       def readTriggerLog
         extend Common
-        Profiles.trigger_log=( YAML.load(readFile( '~/.tcd/trigger_log.yaml' ).join) rescue
+        Triggers.trigger_log=( YAML.load(readFile( '~/.tcd/trigger_log.yaml' ).join) rescue
           {:all=>{:all=>[]}})
       end
       def writeTriggerLog
