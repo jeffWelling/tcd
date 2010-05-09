@@ -18,9 +18,12 @@
   
 =end
 require 'ftools'
+require 'lib/tcd.rb'
+include TCD
 
 module TestLibrary
   @runcount=0
+  attr_reader :runcount
   def makePathWithDate date, direction, path=nil
     raise unless direction==:in or direction==:out or direction==:aggr
     (path.nil? ? ("/foo/bar/delicious/weenies/") : (path) )+"#{date.year}-#{date.month}-#{date.day}/#{date.hour}-#{date.min}-#{date.sec}_#{direction.to_s}.txt"
@@ -48,4 +51,31 @@ module TestLibrary
   def self.ran?
     @runcount > 0
   end
+end
+
+def _defmethod profile, interface, _in,  _out, rollover,  max
+  mod=" 
+    module TCD
+      module Profiles
+        module #{profile}
+          class << self
+            def useProfile?
+              true
+            end
+            def getStats
+              {:#{interface}=> {:in=> #{_in}, :out=> #{_out}}}
+            end
+            def rolloverDay
+              {:#{interface}=> #{rollover}}
+            end
+            def maxCapacity
+              {:#{interface}=> #{max}}
+            end
+          end
+        end
+      end
+    end"
+  eval(mod)
+  Profiles.profiles << eval("TCD::Profiles::#{profile}")
+  Profiles.profiles.uniq!
 end
