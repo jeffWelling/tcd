@@ -23,7 +23,7 @@ module TCD
       include TCD::Profiles
       def getAllProfileStats
         result={}
-        PROFILES.each {|profile|
+        Profiles.profiles.each {|profile|
           stats_plus_timestamp=profile.getStats.merge({:timestamp=>Time.now})
           result.merge!({"#{profile}"[/[^:]+?$/].to_sym => stats_plus_timestamp}) if profile.useProfile?
         }
@@ -45,7 +45,7 @@ module TCD
         ((usage/capacity).to_s[/^\d+\.\d\d/].to_f * 100).to_i
       end
       def aggregateAll
-        PROFILES.each {|profile|
+        Profiles.profiles.each {|profile|
           aggregate profile.to_s[MODULE_NAME_REGEX]
         }
       end
@@ -72,7 +72,7 @@ module TCD
 
       #Run all triggers scheduled to run between the last time this was called and now.
       def runTriggers
-        PROFILES.each {|m|
+        Profiles.profiles.each {|m|
           mod=m.to_s[MODULE_NAME_REGEX]
           TCD::Profiles.getInterfaces(mod).each {|interface|
             #For every percent point between now and last run, do

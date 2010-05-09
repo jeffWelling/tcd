@@ -59,5 +59,7 @@ describe IRB do
     Triggers.register( $profile, $interface, $percent, $rules)
     Triggers.register( $profile, $interface, ($percent + 20), $rules )
     Triggers.trigger_log.should == false
+    IRB.runTriggers
+    Triggers.trigger_log.should == false
   end
 end
