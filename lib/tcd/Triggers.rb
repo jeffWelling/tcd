@@ -79,11 +79,9 @@ module TCD
       #If the last time the trigger was run was in the last billing cycle, 0 will be returned.
       #If the trigger has never been run before, it will return zero.
       def getLastRunUsage profile_name, interface
-        profile_name=profile_name.to_sym
-        interface=interface.to_sym
         @trigger_log||=Storage.readTriggerLog
         trigger=(@trigger_log[profile_name][interface] rescue return(0))
-        rollover_day=eval("Profiles::#{profile_name.to_s.capitalize}.rolloverDay[:#{interface}]")
+        rollover_day=eval("Profiles::#{profile_name.to_s}.rolloverDay[:#{interface}]")
         Storage.writeTriggerLog
         Profiles.inCurrentCycle?( rollover_day, trigger[0] ) ? trigger[1] : 0
       end

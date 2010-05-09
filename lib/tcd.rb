@@ -48,8 +48,6 @@ module TCD
           exit
         end
         stats=TCD::IRB.getAllProfileStats
-        #log "Bandwidth used since last update (in bytes) => #{stats.inspect}"
-        TCD::Storage.saveStats stats
         begin
           TCD::IRB.aggregateAll
         rescue

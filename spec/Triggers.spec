@@ -79,11 +79,16 @@ describe Triggers do
     TestLibrary.ran?.should == true
   end
   it "log that a trigger was run" do
-    Triggers.logTrigger( :Foobar, :eth0, 44 )
-    Triggers.trigger_log.include?(:Foobar).should == true
-    Triggers.trigger_log[:Foobar].include?(:eth0).should == true
-    Triggers.trigger_log[:Foobar][:eth0].length.should == 2
-    Triggers.trigger_log[:Foobar][:eth0][1].should == 44
+    Triggers.logTrigger( $profile, $interface, 44 )
+    Triggers.trigger_log.include?($profile).should == true
+    Triggers.trigger_log[$profile].include?($interface).should == true
+    Triggers.trigger_log[$profile][$interface].length.should == 2
+    Triggers.trigger_log[$profile][$interface][1].should == 44
   end
-  it "get the percent that profile/interface was last triggered at"
+  it "get the percent that profile/interface was last triggered at" do
+    Triggers.register( $profile, $interface, $percent, $rules )
+    #Note that calling register is only here because without it, $profile doesn't get defined.
+    Triggers.logTrigger( $profile, $interface, 42 )
+    Triggers.getLastRunUsage( $profile, $interface ).should == 42
+  end
 end

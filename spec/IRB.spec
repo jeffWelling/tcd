@@ -32,34 +32,50 @@ describe IRB do
     $interface=:eth0
     $percent=42
     $rules=["true",'TestLibrary.setRun']
-    module TCD
-      module Profiles
-        mod="module #{$profile}
-          class << self
-            def useProfile?
-              true
-            end
-            def getStats
-              {:eth0=> {:in=> 1, :out=> 1}}
-            end
-            def rolloverDay
-              {:eth0=> 11}
-            end
-            def maxCapacity
-              {:eth0=>420}
-            end
-          end
-        end"
-      eval mod
-      end
-    end
+    _defmethod($profile.to_sym, $interface.to_sym, 1, 1, 1, 200)
+    
   end
-  it "Runs all triggers scheduled to run between last run and now" do
-    Triggers.register( $profile, $interface, ($percent - 20), $rules )
-    Triggers.register( $profile, $interface, $percent, $rules)
-    Triggers.register( $profile, $interface, ($percent + 20), $rules )
+  it "runs all triggers" do
+    #We don't want to run the actual profiles, so wipe them out
+    Profiles.profiles=[]
+    p1= $profile.to_s+'1'
+    p2= $profile.to_s+'2'
+    p3= $profile.to_s+'3'
+    i1= $interface.to_s+'1'
+    i2= $interface.to_s+'2'
+    i3= $interface.to_s+'3'
+    pc1= 1
+    pc2= 50
+    pc3= 99
+    pc4= 100
+    _defmethod(p1.to_sym, i1.to_sym, 1, 1, 1, 200)
+    _defmethod(p2.to_sym, i2.to_sym, 1, 1, 1, 200)
+    _defmethod(p3.to_sym, i3.to_sym, 1, 1, 1, 200)
+    Triggers.register( p1, i1, pc1, $rules )
+    Triggers.register( p2, i2, pc2, $rules )
+    Triggers.register( p3, i3, pc3, $rules )
+    Triggers.register( p3, i3, pc4,  $rules )
+    require 'pp'
+    pp Profiles.profiles
+    puts "\n"
+    pp Triggers.triggers
+    puts "\n"
     Triggers.trigger_log.should == false
     IRB.runTriggers
-    Triggers.trigger_log.should == false
+    TestLibrary.ran?.should_not == 0
+
+    [p1,p2,p3].each {|p|
+      [i1,i2,i3].each {|i|
+        50.times do
+          #Normally getAllProfileStats is called by the daemon every  X seconds so you don't need to call it.
+          IRB.getAllProfileStats
+          IRB.percentOfCapacity(p, i)
+        end
+      }
+    }
+
+    pp Triggers.trigger_log
+    pp TestLibrary.runcount
+    Triggers.trigger_log.should_not ==  false
   end
 end
