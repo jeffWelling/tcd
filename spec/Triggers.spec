@@ -28,7 +28,7 @@ describe Triggers do
     TestLibrary.resetRuncount
   end
   before :all do
-    $profile=("X"+ rand_file_name().capitalize).to_sym
+    $profile="Foobar".to_sym
     $interface=:eth0
     $percent=42
     $rules=["true",'TestLibrary.setRun']
