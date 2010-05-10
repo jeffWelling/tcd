@@ -55,12 +55,14 @@ module TCD
       end
 
       #Run any triggers associated with this percent for this interface on this profile_name
-      #Intended to be run from IRB.process_triggers
+      #Intended to be run from IRB.runTriggers
       def update profile_name, interface, percent
         profile_name=profile_name.to_sym
         interface=interface.to_sym
         @triggers[profile_name][interface][percent].each {|rules|
-          (eval(rules[1]); logTrigger(profile_name,interface,percent)) if eval(rules[0]).class==TrueClass
+          if eval(rules[0]).class==TrueClass
+            logTrigger(profile_name, interface, percent )
+          end
         } rescue return(false)
         true
       end
