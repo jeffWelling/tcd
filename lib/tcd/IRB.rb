@@ -43,11 +43,10 @@ module TCD
       end
       #Return an integer representing the percent of capacity used on interface according to profile
       def percentOfCapacity profile_name, interface
-        require 'pp'
-        pp usageThisBillingPer(profile_name, interface)
         usage=usageThisBillingPer(profile_name, interface) + 0.00
         capacity=eval("TCD::Profiles::#{profile_name.to_s}.maxCapacity()")[interface.to_sym]
-        ((usage/capacity).to_s[/^\d+\.\d\d/].to_f * 100).to_i
+        raise "profile has no #{interface}" if capacity.nil?
+        ((usage/capacity).to_s[/^\d+\.\d(\d)?/].to_f * 100).to_i
       end
       def aggregateAll
         Profiles.profiles.each {|profile|
