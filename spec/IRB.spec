@@ -26,9 +26,10 @@ include TestLibrary
 describe IRB do
   before :each do
     TestLibrary.resetRuncount
+    Triggers.trigger_log=false
   end
   before :all do
-    $profile=("X"+ rand_file_name().capitalize).to_sym
+    $profile="Foobar".to_sym
     $interface=:eth0
     $percent=42
     $rules=["true",'TestLibrary.setRun']
@@ -55,27 +56,22 @@ describe IRB do
     Triggers.register( p2, i2, pc2, $rules )
     Triggers.register( p3, i3, pc3, $rules )
     Triggers.register( p3, i3, pc4,  $rules )
-    require 'pp'
-    pp Profiles.profiles
-    puts "\n"
-    pp Triggers.triggers
-    puts "\n"
     Triggers.trigger_log.should == false
     IRB.runTriggers
     TestLibrary.ran?.should_not == 0
 
-    [p1,p2,p3].each {|p|
-      [i1,i2,i3].each {|i|
-        50.times do
-          #Normally getAllProfileStats is called by the daemon every  X seconds so you don't need to call it.
-          IRB.getAllProfileStats
-          IRB.percentOfCapacity(p, i)
-        end
+    15.times do
+      sleep 1
+      IRB.getAllProfileStats
+    end
+    IRB.runTriggers
+
+    Profiles.profiles.each {|p|
+      p_name="#{p}"[MODULE_NAME_REGEX]
+      Profiles.getInterfaces(p_name).each {|i|
+        puts "#{p}  #{i}  #{IRB.usageThisBillingPer p_name, i}   #{IRB.percentOfCapacity p_name, i}   #{p.maxCapacity}"
       }
     }
-
-    pp Triggers.trigger_log
-    pp TestLibrary.runcount
     Triggers.trigger_log.should_not ==  false
   end
 end

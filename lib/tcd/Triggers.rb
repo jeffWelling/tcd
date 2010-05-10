@@ -55,12 +55,14 @@ module TCD
       end
 
       #Run any triggers associated with this percent for this interface on this profile_name
-      #Intended to be run from IRB.process_triggers
+      #Intended to be run from IRB.runTriggers
       def update profile_name, interface, percent
         profile_name=profile_name.to_sym
         interface=interface.to_sym
         @triggers[profile_name][interface][percent].each {|rules|
-          (eval(rules[1]); logTrigger(profile_name,interface,percent)) if eval(rules[0]).class==TrueClass
+          if eval(rules[0]).class==TrueClass
+            logTrigger(profile_name, interface, percent )
+          end
         } rescue return(false)
         true
       end
@@ -68,7 +70,7 @@ module TCD
       #log the percent that this trigger was run at so we know what we've missed
       #on the next run.
       def logTrigger profile_name, interface, percent
-        @trigger_log=Hash.new unless @trigger.class==Hash
+        @trigger_log=Hash.new if @trigger_log.empty?
         @trigger_log.merge!( profile_name=>{} ) unless @trigger_log.include?(profile_name)
         @trigger_log[profile_name].merge!( interface=>false ) unless @trigger_log.include?(interface)
         @trigger_log[profile_name][interface]= [DateTime.now, percent]
@@ -80,7 +82,7 @@ module TCD
       #If the trigger has never been run before, it will return zero.
       def getLastRunUsage profile_name, interface
         @trigger_log||=Storage.readTriggerLog
-        trigger=(@trigger_log[profile_name][interface] rescue return(0))
+        trigger=(@trigger_log[profile_name.to_sym][interface.to_sym] rescue return(0))
         rollover_day=eval("Profiles::#{profile_name.to_s}.rolloverDay[:#{interface}]")
         Storage.writeTriggerLog
         Profiles.inCurrentCycle?( rollover_day, trigger[0] ) ? trigger[1] : 0
