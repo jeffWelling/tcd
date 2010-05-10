@@ -70,7 +70,7 @@ module TCD
       #log the percent that this trigger was run at so we know what we've missed
       #on the next run.
       def logTrigger profile_name, interface, percent
-        @trigger_log=Hash.new unless @trigger.class==Hash
+        @trigger_log=Hash.new if @trigger_log.empty?
         @trigger_log.merge!( profile_name=>{} ) unless @trigger_log.include?(profile_name)
         @trigger_log[profile_name].merge!( interface=>false ) unless @trigger_log.include?(interface)
         @trigger_log[profile_name][interface]= [DateTime.now, percent]
