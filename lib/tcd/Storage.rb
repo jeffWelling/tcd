@@ -85,8 +85,16 @@ module TCD
       #Write the trigger log to disk
       def readTriggerLog
         extend Common
-        Triggers.trigger_log=( YAML.load(readFile( '~/.tcd/trigger_log.yaml' ).join) rescue
-          {:all=>{:all=>[]}})
+        trigger_log=Triggers.trigger_log=( YAML.load(readFile( '~/.tcd/trigger_log.yaml' ).join) rescue {:all=>{:all=>[]}})
+        #Convert Time to DateTime
+        require 'pp'
+        pp trigger_log
+        trigger_log.each_key {|profile|
+          trigger_log[profile].each_key {|interface|
+            trigger_log[profile][interface][0]= DateTime.parse(trigger_log[profile][interface][0].to_s)
+          }
+        }
+        trigger_log
       end
       def writeTriggerLog
         extend Common
