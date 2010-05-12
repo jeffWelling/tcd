@@ -26,7 +26,7 @@ include TestLibrary
 describe IRB do
   before :each do
     TestLibrary.resetRuncount
-    Triggers.trigger_log=false
+    Triggers.trigger_log=[]
   end
   before :all do
     $profile="Foobar".to_sym

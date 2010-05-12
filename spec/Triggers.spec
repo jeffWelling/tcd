@@ -26,13 +26,14 @@ include TestLibrary
 describe Triggers do
   before :each do
     TestLibrary.resetRuncount
+    Profiles.profiles=[]
   end
   before :all do
     $profile="Foobar".to_sym
     $interface=:eth0
     $percent=42
     $rules=["true",'TestLibrary.setRun']
-    _defmethod $profile, $interface, 1, 1, 1, 200
+    _defmethod $profile, $interface, 4, 4, 1, 200
   end
   it "registers a set of rules" do 
     #rules should not yet be registered
