@@ -27,7 +27,7 @@ module TCD
     #     of capacity has been reached on that interface in that profile for the current billing
     #     period.
     @triggers={}
-    @trigger_log=false
+    @trigger_log=[]
     class << self
       
       attr_reader :triggers
