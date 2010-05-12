@@ -56,7 +56,7 @@ describe IRB do
     Triggers.register( p2, i2, pc2, $rules )
     Triggers.register( p3, i3, pc3, $rules )
     Triggers.register( p3, i3, pc4,  $rules )
-    Triggers.trigger_log.should == false
+    Triggers.trigger_log.should == []
     IRB.runTriggers
     TestLibrary.ran?.should_not == 0
 
@@ -69,9 +69,8 @@ describe IRB do
     Profiles.profiles.each {|p|
       p_name="#{p}"[MODULE_NAME_REGEX]
       Profiles.getInterfaces(p_name).each {|i|
-        puts "#{p}  #{i}  #{IRB.usageThisBillingPer p_name, i}   #{IRB.percentOfCapacity p_name, i}   #{p.maxCapacity}"
       }
     }
-    Triggers.trigger_log.should_not ==  false
+    Triggers.trigger_log.should_not == []
   end
 end
