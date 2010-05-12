@@ -61,6 +61,7 @@ module TCD
         interface=interface.to_sym
         @triggers[profile_name][interface][percent].each {|rules|
           if eval(rules[0]).class==TrueClass
+            eval(rules[1])
             logTrigger(profile_name, interface, percent )
           end
         } rescue return(false)
