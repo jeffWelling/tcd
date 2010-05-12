@@ -32,27 +32,7 @@ describe Triggers do
     $interface=:eth0
     $percent=42
     $rules=["true",'TestLibrary.setRun']
-    module TCD
-      module Profiles
-        mod="module #{$profile}
-          class << self
-            def useProfile?
-              true
-            end
-            def getStats
-              {:eth0=> {:in=> rand(200), :out=> rand(200)}}
-            end
-            def rolloverDay
-              {:eth0=> 11}
-            end
-            def maxCapacity
-              {:eth0=>420}
-            end
-          end
-        end"
-      eval mod
-      end
-    end
+    _defmethod $profile, $interface, 1, 1, 1, 200
   end
   it "registers a set of rules" do 
     #rules should not yet be registered
