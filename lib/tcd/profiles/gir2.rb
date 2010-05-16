@@ -33,16 +33,6 @@ module TCD
           eth1_out=`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_eth1_out.key root@gir 2>/dev/null`
           eth2_in=`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_eth2_in.key root@gir 2>/dev/null`
           eth2_out=`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_eth2_out.key root@gir 2>/dev/null`
-#          _in= getBytes(`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_in.key gir 2>/dev/null`) rescue 0
-#          _out=getBytes(`/usr/bin/ssh -i #{File.expand_path("~/Documents/Projects/tcd")}/traffic_control_daemon_out.key gir 2>/dev/null`) rescue 0
-          eth1_in_bytes= eth1_in.split("\n")[2].split[1]
-          eth1_out_bytes=eth1_out.split("\n")[2].split[1]
-          eth2_in_bytes= eth2_in.split("\n")[2].split[1]
-          eth2_out_bytes=eth2_out.split("\n")[2].split[1]
-          puts eth1_in_bytes
-          puts eth1_out_bytes
-          puts eth2_in_bytes
-          puts eth2_out_bytes
           { :eth1=>{:in=> toBytes(eth1_in.split("\n")[2].split[1]) , :out=> toBytes(eth1_out.split("\n")[2].split[1])},   
            :eth2=>{:in=> toBytes(eth2_in.split("\n")[2].split[1]) , :out=> toBytes(eth2_out.split("\n")[2].split[1])} }
 
