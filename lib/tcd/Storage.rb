@@ -36,9 +36,9 @@ module TCD
           timestamp= stats[profile_name][:timestamp]
           stats[profile_name].each_key {|interface|
             next if interface==:timestamp
-            dir= "~/.tcd/stats/#{profile_name}/#{interface}/#{timestamp.now.year}-#{timestamp.now.month}-#{timestamp.now.day}/"
-            writeFile( stats[profile_name][interface][:in], timestamp.now.strftime("%H-%M-%S")+"_in.txt", dir, :append )
-            writeFile( stats[profile_name][interface][:out],timestamp.now.strftime("%H-%M-%S")+"_out.txt", dir, :append )
+            dir= "~/.tcd/stats/#{profile_name}/#{interface}/#{timestamp.year}-#{timestamp.month}-#{timestamp.day}/"
+            writeFile( stats[profile_name][interface][:in], timestamp.strftime("%H-%M-%S")+"_in.txt", dir, :append )
+            writeFile( stats[profile_name][interface][:out],timestamp.strftime("%H-%M-%S")+"_out.txt", dir, :append )
           }
         }
       end
