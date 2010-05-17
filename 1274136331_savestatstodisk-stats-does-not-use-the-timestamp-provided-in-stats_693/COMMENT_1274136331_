@@ -1,0 +1,1 @@
+saveStatsToDisk doesnt currently use the timestamp provided in the stats argument, it pulls its own data from Time.

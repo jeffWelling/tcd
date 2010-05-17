@@ -1,1 +1,0 @@
-There might be ISPs out there that say your maximum capacity is X, and that you are then allowed to download X number of bytes both down and up for a grand total of X+X bytes. I highly doubt this, but it will be neat to program anyway.
