@@ -40,7 +40,11 @@ describe IRB do
   it "returns the usage for this billing cycle"
   it "returns the percent of capacity used so far in this billing cycle"
   it "Aggregates all data"
-  it "Aggregate all data for profile_name and interface"
+  it "Aggregate all data for profile_name and interface" do
+    ((60 * 60 * 24 ) / 30) times do
+      
+    end
+  end
   it "runs all triggers" do
     #We don't want to run the actual profiles, so wipe them out
     Profiles.profiles=[]
