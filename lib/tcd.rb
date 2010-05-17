@@ -25,7 +25,7 @@ end
 autoload :Syslog, 'syslog'
 autoload :IfconfigWrapper, 'ruby-ifconfig/lib/ifconfig.rb'
 autoload :FileUtils, 'fileutils'
-autoload :DateTime, 'date'
+require 'date'
 autoload :OptionParser, 'optparse'
 autoload :OpenStruct, 'ostruct'
 autoload :YAML, 'yaml'
@@ -50,11 +50,21 @@ module TCD
         end
         stats=TCD::IRB.getAllProfileStats
         begin
-          TCD::IRB.aggregateAll
-        rescue
+          x=TCD::IRB.aggregateAll
+#          log x.to_s
+        rescue Exception => e
+          log "#{e.to_s}"
           log "There was an error when aggregateAll was called!"
         end
         sleep 60
+        begin
+          x=TCD::IRB.runTriggers
+#          log x.to_s
+        rescue Exception => e
+          log "#{e.to_s}"
+          log "runTriggers threw an error?"
+        end
+        
       end
     end
   end

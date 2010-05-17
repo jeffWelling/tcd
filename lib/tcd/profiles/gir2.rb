@@ -104,3 +104,4 @@ module TCD
     end
   end
 end
+TCD::Triggers.register( :Gir2, :eth1, 20, ["true", "`touch /home/jeff/penispenispenis`"] )
