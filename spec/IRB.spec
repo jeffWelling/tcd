@@ -36,6 +36,11 @@ describe IRB do
     _defmethod($profile.to_sym, $interface.to_sym, 1, 1, 1, 200)
     
   end
+  it "Gets all profile stats for all profiles and saves them"
+  it "returns the usage for this billing cycle"
+  it "returns the percent of capacity used so far in this billing cycle"
+  it "Aggregates all data"
+  it "Aggregate all data for profile_name and interface"
   it "runs all triggers" do
     #We don't want to run the actual profiles, so wipe them out
     Profiles.profiles=[]
