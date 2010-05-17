@@ -22,6 +22,7 @@ load 'lib/tcd.rb'
 include TCD
 load 'TestLibrary.rb'
 include TestLibrary
+require 'time'
 
 describe IRB do
   before :each do
@@ -41,9 +42,15 @@ describe IRB do
   it "returns the percent of capacity used so far in this billing cycle"
   it "Aggregates all data"
   it "Aggregate all data for profile_name and interface" do
-    ((60 * 60 * 24 ) / 30) times do
-      
-    end
+    time=nil
+    ((60 * 60 * 24 ) / 30).times.each {|num|
+      time=Time.parse("May 17 2009 0:00:00").+(num)     #An arbitrary date, starting at 0:00:00
+      stats={ :Foobar=> {
+        :timestamp=>time,
+        :eth1=>{ :in=>1, :out=> 1}}
+       }
+      Storage.saveStatsToDisk stats
+    }
   end
   it "runs all triggers" do
     #We don't want to run the actual profiles, so wipe them out
