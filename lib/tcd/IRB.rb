@@ -54,10 +54,10 @@ module TCD
         }
       end
       #Aggregate stats for profile_name, optionally restricted to only stats for interface
-      def aggregate profile_name, interface=false
+      def aggregate profile_name, interface=nil
         extend TCD::Common
         count=0
-        Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface ? interface : '*'}/*")).each {|path|
+        Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface || '*'}/*")).each {|path|
           next unless TCD::Profiles.needsAggregating(path)
           day= getDateFromPath(path)
           interface= File.basename(File.dirname(path))
