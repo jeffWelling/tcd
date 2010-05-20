@@ -26,8 +26,7 @@ module TCD
         Profiles.profiles.select {|profile|
           profile.useProfile?
         }.each {|profile|
-          stats_plus_timestamp=profile.getStats.merge({:timestamp=>Time.now})
-          result["#{profile}"[/[^:]+?$/].to_sym] = stats_plus_timestamp
+          result["#{profile}"[/[^:]+?$/].to_sym] = profile.getStats.merge({:timestamp=>Time.now})
         }
         TCD::Storage.saveStats result
         result
