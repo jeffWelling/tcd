@@ -43,14 +43,26 @@ describe IRB do
   it "Aggregates all data"
   it "Aggregate all data for profile_name and interface" do
     time=nil
-    ((60 * 60 * 24 ) / 30).times.each {|num|
-      time=Time.parse("May 17 2009 0:00:00").+(num)     #An arbitrary date, starting at 0:00:00
+    seconds_between_statfiles=30
+    n=((60 * 60 * 24 ) / seconds_between_statfiles)
+    n_n=0
+    in_counter=0
+    out_counter=0
+    n.times do
+      time=Time.parse("May 17 2009 0:00:00").+(n_n+=seconds_between_statfiles)     #An arbitrary date, starting at 0:00:00
       stats={ :Foobar=> {
         :timestamp=>time,
         :eth1=>{ :in=>1, :out=> 1}}
        }
+      in_counter+=1
+      out_counter+=1
       Storage.saveStatsToDisk stats
-    }
+    end
+    read_stats=Storage.readStats(:Foobar, :eth1) { true }
+    (read_stats[:in].size + read_stats[:out].size).should == in_counter+out_counter
+    
+    puts in_counter+out_counter
+#    FileUtils.rm_rf File.expand_path("~/.tcd/stats/Foobar")
   end
   it "runs all triggers" do
     #We don't want to run the actual profiles, so wipe them out

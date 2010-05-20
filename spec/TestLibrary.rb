@@ -18,6 +18,7 @@
   
 =end
 require 'ftools'
+require 'fileutils'
 require 'lib/tcd.rb'
 include TCD
 
