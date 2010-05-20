@@ -22,12 +22,11 @@ module TCD
     class << self
       include TCD::Profiles
       def getAllProfileStats
-        result={}
-        Profiles.profiles.select {|profile|
+        result=Profiles.profiles.select {|profile|
           profile.useProfile?
-        }.each {|profile|
-          result["#{profile}"[/[^:]+?$/].to_sym] = profile.getStats.merge({:timestamp=>Time.now})
-        }
+        }.collect {|profile|
+          ["#{profile}"[/[^:]+?$/].to_sym], profile.getStats.merge({:timestamp=>Time.now})]
+        }.to_h
         TCD::Storage.saveStats result
         result
       end
