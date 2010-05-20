@@ -23,8 +23,9 @@ module TCD
       include TCD::Profiles
       def getAllProfileStats
         result={}
-        Profiles.profiles.each {|profile|
-          next unless profile.useProfile?
+        Profiles.profiles.select {|profile|
+          profile.useProfile?
+        }.each {|profile|
           stats_plus_timestamp=profile.getStats.merge({:timestamp=>Time.now})
           result["#{profile}"[/[^:]+?$/].to_sym] = stats_plus_timestamp
         }
