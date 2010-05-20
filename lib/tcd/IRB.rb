@@ -28,7 +28,6 @@ module TCD
           ["#{profile}"[/[^:]+?$/].to_sym], profile.getStats.merge({:timestamp=>Time.now})]
         }.to_h
         TCD::Storage.saveStats result
-        result
       end
       #Return the total number of bytes used this billing cycle
       def usageThisBillingPer profile_name, interface
