@@ -61,7 +61,6 @@ describe IRB do
     read_stats=Storage.readStats(:Foobar, :eth1) { true }
     (read_stats[:in].size + read_stats[:out].size).should == in_counter+out_counter
     
-    puts in_counter+out_counter
     FileUtils.rm_rf File.expand_path("~/.tcd/stats/Foobar")
   end
   it "runs all triggers" do
