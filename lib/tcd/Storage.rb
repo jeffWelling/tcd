@@ -66,6 +66,7 @@ module TCD
       #Read path, and generate a list of stats from it.
       def processStat path
         result=[]
+        return(readAggStat(path)) if path.include?('aggr')
         File.basename(path).include?('in') ? (result[0]=:in) : (result[0]=:out)
         result[1]=readOneStat(path)
         return result
@@ -74,6 +75,10 @@ module TCD
       def readOneStat path
         extend TCD::Common
         [readFile(path)[0].to_i, getDateTimeFromPath(path).to_s]
+      end
+      def readAggStat path
+        extend TCD::Common
+        YAML.load readFile(path).join
       end
       #Read an aggregated stat file, containing a combination of integers to timestamps.
       #The integers being the number of bytes transferred at that timestamp.
