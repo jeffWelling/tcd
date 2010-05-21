@@ -99,8 +99,10 @@ module TCD
         extend Common
         trigger_log=Triggers.trigger_log=( YAML.load(readFile( '~/.tcd/trigger_log.yaml' ).join) rescue {:all=>{:all=>[]}})
         #Convert Time to DateTime
+        trigger_log={:all=>{:all=>[]}} unless trigger_log
         trigger_log.each_key {|profile|
           trigger_log[profile].each_key {|interface|
+            next unless trigger_log[profile][interface].length > 0
             trigger_log[profile][interface][0]= DateTime.parse(trigger_log[profile][interface][0].to_s)
           }
         }
