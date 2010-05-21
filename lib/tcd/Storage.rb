@@ -26,8 +26,8 @@ module TCD
       end
       #Read stats, using the block provided to determine if the record should be included
       #assuming a block is provided
-      def readStats profile_name, interface, &blk
-        readStatsFromDisk profile_name, interface, &blk
+      def readStats profile_name, interface, use_sums=nil, &blk
+        readStatsFromDisk profile_name, interface, use_sums, &blk
       end
       #Save stats to disk in a ~/.tcd/stats/$profile_name/$if/$timestamp.yaml manner
       def saveStatsToDisk stats
@@ -45,12 +45,19 @@ module TCD
       #Read stats from ~/.tcd/stats for profile_name and interface.  The block passed each path
       #in succession and must return true if that path should be read and included in the tally
       #returned to the user.
-      def readStatsFromDisk profile_name, interface, &blk
+      def readStatsFromDisk profile_name, interface, use_sums=nil, &blk
         values={:in=>[],:out=>[]}
         Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface}/**/*")).each {|path|
           next unless path[STAT_FILE_REGEX]
           result=processStat(path) if yield(path)
           unless result.nil?
+            if result.class==Hash and result[:in][0][1]==:sum and result[:out][0][1]==:sum
+              #aggregate file
+              use_sums ? ((values[:in] << result[:in][0]) and (values[:out] << result[:out][0])) : 
+                ((result[:in][1..(result[:in].size)].each {|p_d| values[:in] << p_d}  ) and (result[:out][1..(result[:out].size)].each {|p_d| values[:out] << p_d}  ) )
+
+              next
+            end
             result[0]==:in ? values[:in] << result[1] : values[:out] << result[1]
           end
         }
