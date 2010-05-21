@@ -45,8 +45,6 @@ module TCD
         stats= TCD::Storage.readStats(profile_name, interface, true) {|path| true }
         bytes_in=0
         bytes_out=0
-        require 'pp'
-        pp stats
         stats[:in].each {|size, date| bytes_in+=size}
         stats[:out].each{|size, date| bytes_out+=size}
         bytes_in+bytes_out
