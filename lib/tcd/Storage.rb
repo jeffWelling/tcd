@@ -26,8 +26,8 @@ module TCD
       end
       #Read stats, using the block provided to determine if the record should be included
       #assuming a block is provided
-      def readStats profile_name, interface, &blk
-        readStatsFromDisk profile_name, interface, &blk
+      def readStats profile_name, interface, use_sums=nil, &blk
+        readStatsFromDisk profile_name, interface, use_sums, &blk
       end
       #Save stats to disk in a ~/.tcd/stats/$profile_name/$if/$timestamp.yaml manner
       def saveStatsToDisk stats
@@ -45,12 +45,19 @@ module TCD
       #Read stats from ~/.tcd/stats for profile_name and interface.  The block passed each path
       #in succession and must return true if that path should be read and included in the tally
       #returned to the user.
-      def readStatsFromDisk profile_name, interface, &blk
+      def readStatsFromDisk profile_name, interface, use_sums=nil, &blk
         values={:in=>[],:out=>[]}
         Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface}/**/*")).each {|path|
           next unless path[STAT_FILE_REGEX]
           result=processStat(path) if yield(path)
           unless result.nil?
+            if result.class==Hash and result[:in][0][1]==:sum and result[:out][0][1]==:sum
+              #aggregate file
+              use_sums ? ((values[:in] << result[:in][0]) and (values[:out] << result[:out][0])) : 
+                ((result[:in][1..(result[:in].size)].each {|p_d| values[:in] << p_d}  ) and (result[:out][1..(result[:out].size)].each {|p_d| values[:out] << p_d}  ) )
+
+              next
+            end
             result[0]==:in ? values[:in] << result[1] : values[:out] << result[1]
           end
         }
@@ -59,6 +66,7 @@ module TCD
       #Read path, and generate a list of stats from it.
       def processStat path
         result=[]
+        return(readAggStat(path)) if path.include?('aggr')
         File.basename(path).include?('in') ? (result[0]=:in) : (result[0]=:out)
         result[1]=readOneStat(path)
         return result
@@ -67,6 +75,10 @@ module TCD
       def readOneStat path
         extend TCD::Common
         [readFile(path)[0].to_i, getDateTimeFromPath(path).to_s]
+      end
+      def readAggStat path
+        extend TCD::Common
+        YAML.load readFile(path).join
       end
       #Read an aggregated stat file, containing a combination of integers to timestamps.
       #The integers being the number of bytes transferred at that timestamp.
@@ -87,8 +99,10 @@ module TCD
         extend Common
         trigger_log=Triggers.trigger_log=( YAML.load(readFile( '~/.tcd/trigger_log.yaml' ).join) rescue {:all=>{:all=>[]}})
         #Convert Time to DateTime
+        trigger_log={:all=>{:all=>[]}} unless trigger_log
         trigger_log.each_key {|profile|
           trigger_log[profile].each_key {|interface|
+            next unless trigger_log[profile][interface].length > 0
             trigger_log[profile][interface][0]= DateTime.parse(trigger_log[profile][interface][0].to_s)
           }
         }
