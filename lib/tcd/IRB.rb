@@ -21,10 +21,10 @@ module TCD
   module IRB
     class << self
       include TCD::Profiles
-      def getAllProfileStats
-        profiles = Profiles.profiles.select {|profile| profile.useProfile? }
-        stats = profiles.collect {|profile| ["#{profile}"[/[^:]+?$/].to_sym, profile.getStats.merge({:timestamp=>Time.now})] }.to_h
-        TCD::Storage.saveStats stats
+      def getAllProfileStats profiles = nil
+        profiles ||= Profiles.profiles.select {|profile| profile.useProfile? }
+        stats = profiles.collect {|profile| ["#{profile}"[/[^:]+?$/].to_sym, profile.getStats.merge({:timestamp=>Time.now})] }
+        TCD::Storage.saveStats(stats.inject({}) {|h,a| h[a[0]] = a[1] ; h })
       end
       #Return the total number of bytes used this billing cycle
       def usageThisBillingPer profile_name, interface
