@@ -22,9 +22,15 @@ module TCD
     class << self
       include TCD::Profiles
       def getAllProfileStats
-        profiles = Profiles.profiles.select {|profile| profile.useProfile? }
-        stats = profiles.collect {|profile| ["#{profile}"[/[^:]+?$/].to_sym, profile.getStats.merge({:timestamp=>Time.now})] }.to_h
-        TCD::Storage.saveStats stats
+        result={}
+        Profiles.profiles.each {|profile|
+          if profile.useProfile?
+            stats_plus_timestamp=profile.getStats.merge({:timestamp=>Time.now})
+            result.merge!({"#{profile}"[/[^:]+?$/].to_sym => stats_plus_timestamp})
+          end
+        }
+        TCD::Storage.saveStats result
+        result
       end
       #Return the total number of bytes used this billing cycle
       def usageThisBillingPer profile_name, interface
