@@ -48,7 +48,13 @@ module TCD
           log "Traffic control daemon terminating!"
           exit
         end
-        stats=TCD::IRB.getAllProfileStats
+        begin
+          stats=TCD::IRB.getAllProfileStats
+        rescue Exception => e
+          log "#{e.to_s}"
+          log "There was an error when getAllProfileStats was called..?"
+        end
+        
         begin
           x=TCD::IRB.aggregateAll
 #          log x.to_s
