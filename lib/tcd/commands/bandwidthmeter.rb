@@ -21,7 +21,8 @@ module TCD
   module Command
     module BandwidthMeter
       def parser(o)
-        o.banner= "Usage: tcd (bwmeter|bandwidthmeter|meter) [options] Shows the amount of bandwidth used in this billing cycle"
+        o.banner= "Usage: tcd (bwmeter|bandwidthmeter|meter) (options) Shows the amount of bandwidth used in this billing cycle\n"+
+                  "Example:   tcd bandwidthmeter -p Gir -i eth1     Gir is the profile name, eth1 is the interface to check"
         o.on_head(
           "-p PROFILE_NAME", "--profile PROFILE_NAME", "Specify the profile name to check statistics for"){|v|
           options.profile= v
@@ -32,6 +33,7 @@ module TCD
         }
       end
       def execute
+        (puts "You must include the requisite options, -p and -i. See help for more info."; exit) unless options.profile and options.interface
         puts "Total bandwidth used in this billing cycle is #{TCD::IRB.usageThisBillingPer(options.profile, options.interface)} Bytes."
       end
     end
