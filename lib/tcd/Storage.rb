@@ -19,6 +19,7 @@
 =end
 module TCD
   module Storage
+    @in_memory_stats=nil
     class << self
       #Store the results of running getAllProfileStats
       def saveStats stats
@@ -62,6 +63,11 @@ module TCD
           end
         }
         values
+      end
+      def readStatsFromMemory
+        
+      end
+      def writeStatsToMemory
       end
       #Read path, and generate a list of stats from it.
       def processStat path
