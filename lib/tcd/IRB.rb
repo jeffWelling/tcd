@@ -21,7 +21,8 @@ module TCD
   module IRB
     class << self
       include TCD::Profiles
-      def getAllProfileStats
+      #Get stats from all profile, and save them if the save argument is true
+      def getAllProfileStats save=nil
         result={}
         Profiles.profiles.each {|profile|
           if profile.useProfile?
@@ -29,7 +30,7 @@ module TCD
             result.merge!({"#{profile}"[/[^:]+?$/].to_sym => stats_plus_timestamp})
           end
         }
-        TCD::Storage.saveStats result
+        TCD::Storage.saveStats(result) unless save==:dont_save
         result
       end
       #Return the total number of bytes used this billing cycle
