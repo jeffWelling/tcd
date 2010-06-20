@@ -113,7 +113,7 @@ module TCD
         @in_memory_statss.each_key {|profile_name|
           @in_memory_statss.each_key {|interface|
             next if @in_memory_statss[profile_name][interface]==:timestamp
-            
+            #remove out of cycle bandwidth=>date sets
           }
         }
       end
