@@ -90,19 +90,20 @@ module TCD
       end
       def writeStatsToMemory stats
         saveStatsToDisk stats
+        @in_memory_stats=initMemCounter if @in_memory_stats.nil?
         stats.each_key {|profile_name|
-          timestamp= stats[profile_name][:timestamp]
+          timestamp= DateTime.parse( stats[profile_name][:timestamp].to_s )
           stats[profile_name].each_key {|interface|
             next if interface==:timestamp
             
             @in_memory_stats=Hash.new if @in_memory_stats.nil?
-            @in_memory_stats[profile_name]=Hash.new if @in_memory_stats[profile_name].nil?
-            @in_memory_stats[profile_name][interface]=Hash.new if @in_memory_stats[profile_name][interface].nil?
-            @in_memory_stats[profile_name][interface][:in]= Array.new if @in_memory_stats[profile_name][interface][:in].nil?
-            @in_memory_stats[profile_name][interface][:out]= Array.new if @in_memory_stats[profile_name][interface][:out].nil?
+            @in_memory_stats[profile_name.to_s]=Hash.new if @in_memory_stats[profile_name.to_s].nil?
+            @in_memory_stats[profile_name.to_s][interface]=Hash.new if @in_memory_stats[profile_name.to_s][interface].nil?
+            @in_memory_stats[profile_name.to_s][interface][:in]= Array.new if @in_memory_stats[profile_name.to_s][interface][:in].nil?
+            @in_memory_stats[profile_name.to_s][interface][:out]= Array.new if @in_memory_stats[profile_name.to_s][interface][:out].nil?
 
-            @in_memory_stats[profile_name][interface][:in] << [stats[profile_name][interface][:in],[timestamp.to_s]]
-            @in_memory_stats[profile_name][interface][:out] <<[stats[profile_name][interface][:out],[timestamp.to_s]]
+            @in_memory_stats[profile_name.to_s][interface][:in] << [stats[profile_name][interface][:in],[timestamp.to_s]]
+            @in_memory_stats[profile_name.to_s][interface][:out] <<[stats[profile_name][interface][:out],[timestamp.to_s]]
           }
         }
         cleanInMemCounters
