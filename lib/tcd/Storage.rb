@@ -21,6 +21,11 @@ module TCD
   module Storage
     @in_memory_stats=nil
     class << self
+      attr_accessor :in_memory_stats
+      def initMemCounter
+        #{"Gir2"=> {"eth1"=> [] }}
+        {}
+      end
       #Store the results of running getAllProfileStats
       def saveStats stats
         saveStatsToDisk stats
