@@ -20,6 +20,8 @@
 module TCD
   module Storage
     @in_memory_stats=nil
+    #@in_memory_stats={ Profile_name => { interface => { :in => [[ i, date ]...],
+    #                                                    :out=> [[ i, date ]...]}
     class << self
       #Store the results of running getAllProfileStats
       def saveStats stats
