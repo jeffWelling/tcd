@@ -47,6 +47,8 @@ module TCD
             writeFile( stats[profile_name][interface][:out],timestamp.strftime("%H-%M-%S")+"_out.txt", dir, :append )
           }
         }
+
+
       end
       #Read stats from ~/.tcd/stats for profile_name and interface.  The block passed each path
       #in succession and must return true if that path should be read and included in the tally
@@ -69,10 +71,38 @@ module TCD
         }
         values
       end
-      def readStatsFromMemory
-        
+      def readStatsFromMemory profile_name, interface, use_sums, more_than_this_cycle=false, &blk
+        @in_memory_stats=initMemCounter if @in_memory_stats.nil?
+        return readStatsFromDisk(profile_name, interface, use_sums, &blk) if more_than_this_cycle
+        @in_memory_stats[profile_name][interface]
       end
-      def writeStatsToMemory
+      def writeStatsToMemory stats
+        saveStatsToDisk stats
+        stats.each_key {|profile_name|
+          timestamp= stats[profile_name][:timestamp]
+          stats[profile_name].each_key {|interface|
+            next if interface==:timestamp
+            
+            @in_memory_stats=Hash.new if @in_memory_stats.nil?
+            @in_memory_stats[profile_name]=Hash.new if @in_memory_stats[profile_name].nil?
+            @in_memory_stats[profile_name][interface]=Hash.new if @in_memory_stats[profile_name][interface].nil?
+            @in_memory_stats[profile_name][interface][:in]= Array.new if @in_memory_stats[profile_name][interface][:in].nil?
+            @in_memory_stats[profile_name][interface][:out]= Array.new if @in_memory_stats[profile_name][interface][:out].nil?
+
+            @in_memory_stats[profile_name][interface][:in] << [stats[profile_name][interface][:in],[timestamp.to_s]]
+            @in_memory_stats[profile_name][interface][:out] <<[stats[profile_name][interface][:out],[timestamp.to_s]]
+          }
+        }
+        cleanInMemCounters
+      end
+      def cleanInMemCounters
+        return nil if @in_memory_statss.nil?
+        @in_memory_statss.each_key {|profile_name|
+          @in_memory_statss.each_key {|interface|
+            next if @in_memory_statss[profile_name][interface]==:timestamp
+            
+          }
+        }
       end
       #Read path, and generate a list of stats from it.
       def processStat path
