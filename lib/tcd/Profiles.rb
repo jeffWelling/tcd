@@ -38,11 +38,6 @@ module TCD
         path_date= getDateTimeFromPath(path)
         inCurrentCycle?(rollover_day, path_date)
       end
-      def DateTimeInCurrentCycle?(profile_name, interface, datetime)
-        rollover_day= eval("TCD::Profiles::#{profile_name}.rolloverDay")[interface.to_sym]
-        raise 'datetime must be DateTime' unless datetime.class==DateTime
-        inCurrentCycle?(rollover_day, datetime)
-      end
       #Checks to see if date is within the current billing cycle, using rollover_day
       def inCurrentCycle?(rollover_day, date)
         date >= lastRolloverDate( rollover_day )
