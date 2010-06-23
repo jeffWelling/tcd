@@ -1,0 +1,1 @@
+The 'config' files are called Profiles, and are extentions of the module itself.  The user is required to define a number of methods, including the ones that retrieve the actual number of bytes in and out for an interface.
