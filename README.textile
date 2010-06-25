@@ -110,13 +110,15 @@ then log out again. And nothing else.  Don't take my word for it, test it for yo
 If you want to be even more secure you can use from= to only allow logins from specific
 hosts.
 
-Now, I use pmacct on my gateway to collect traffic statistics, and you can see in the
+Now I use iptables rules, but you can also use pmacct.
+I was using pmacct on my gateway to collect traffic statistics, and you can see in the
 example above, I'm executing pmacct on 2 different pipes, for in and out respectively.
 How you collect and get these statistics into the **getStats()** method's output is
-left entirely up to you so you can use any method you wish.  If, however, you want to
-mimic my setup, then install pmacct on your gateway and try out this example config.
-I extracted the important lines from my own config; I'd post my config itself but it
-has several plugins configured and may be overcomplicated for the average user.
+left entirely up to you so you can use any method you wish though there are examples
+to help you get started.  If, however, you want to mimic my setup, then install 
+pmacct on your gateway and try out this example config. I extracted the important 
+lines from my own config; I'd post my config itself but it has several plugins 
+configured and may be overcomplicated for the average user.
 
 __/etc/pmacct/pmacctd.eth2.conf__
 
