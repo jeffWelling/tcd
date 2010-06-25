@@ -65,7 +65,7 @@ module TCD
         #11th I can start downloading again because the 11th of every month is the first day of my new billing cycle.  So, I'd enter 11.
         #You need to add a rolloverDay for each interface, and it must be in the for of a hash such as {:eth0=>11}.
         def rolloverDay
-          {:eth1=>11, :eth2=>1}
+          {:eth1=>25, :eth2=>11}
         end
         #Must return a hash, one symbol-key per interface, pointing to the number of bytes an interface
         #takes to reach 100% capacity.
