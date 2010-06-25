@@ -112,11 +112,17 @@ module TCD
         cleanInMemCounters
       end
       def cleanInMemCounters
-        return nil if @in_memory_statss.nil?
-        @in_memory_statss.each_key {|profile_name|
-          @in_memory_statss.each_key {|interface|
-            next if @in_memory_statss[profile_name][interface]==:timestamp
+        extend Profiles
+        return nil if @in_memory_stats.nil?
+        @in_memory_stats.each_key {|profile_name|
+          @in_memory_stats[profile_name].each_key {|interface|
+            next if @in_memory_stats[profile_name][interface]==:timestamp
             #remove out of cycle bandwidth=>date sets
+            @in_memory_stats[profile_name][interface]=@in_memory_stats[profile_name][interface].delete_if {|stat_dates, xenu|
+              date=xenu
+              date=date[0] if date.class==Array
+              !Profiles.dateTimeInCurrentCycle?(profile_name, interface, DateTime.parse(date[1]))
+            }
           }
         }
       end
