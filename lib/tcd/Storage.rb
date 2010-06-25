@@ -31,11 +31,12 @@ module TCD
           profile_name=profile.to_s[TCD::MODULE_NAME_REGEX]
           stats.merge!( {profile_name => {}} ) unless stats.has_key? profile_name
           TCD::Profiles.getInterfaces( profile_name ).each {|interface|
-            stats[profile_name].merge!( { interface.to_s => {:in=>[], :out=>[]} } ) unless stats[profile_name].has_key? interface.to_s
-
-            old_stats=TCD::Storage.readStats(profile_name, interface.to_s) {|path| TCD::Profiles.PathInCurrentCycle?(profile_name, interface.to_s, path) }
-            stats[profile_name][interface.to_s][:in] << old_stats[:in]
-            stats[profile_name][interface.to_s][:out]<< old_stats[:out] 
+            stats[profile_name].merge!( { interface.to_sym => {:in=>[], :out=>[]} } ) unless stats[profile_name].has_key? interface.to_sym
+            old_stats=TCD::Storage.readStats(profile_name, interface.to_s) {|path| 
+              TCD::Profiles.PathInCurrentCycle?(profile_name, interface.to_s, path) 
+            }
+            old_stats[:in].each {|x| stats[profile_name][interface.to_sym][:in] << x}
+            old_stats[:out].each {|x|stats[profile_name][interface.to_sym][:out]<< x}
           }
         }
         stats
