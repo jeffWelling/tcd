@@ -105,8 +105,8 @@ module TCD
             @in_memory_stats[profile_name.to_s][interface][:in]= Array.new if @in_memory_stats[profile_name.to_s][interface][:in].nil?
             @in_memory_stats[profile_name.to_s][interface][:out]= Array.new if @in_memory_stats[profile_name.to_s][interface][:out].nil?
 
-            @in_memory_stats[profile_name.to_s][interface][:in] << [stats[profile_name][interface][:in],[timestamp.to_s]]
-            @in_memory_stats[profile_name.to_s][interface][:out] <<[stats[profile_name][interface][:out],[timestamp.to_s]]
+            @in_memory_stats[profile_name.to_s][interface][:in] << [stats[profile_name][interface][:in],timestamp.to_s]
+            @in_memory_stats[profile_name.to_s][interface][:out] <<[stats[profile_name][interface][:out],timestamp.to_s]
           }
         }
         cleanInMemCounters
