@@ -7,14 +7,12 @@ programs to run when an interface reaches a predetermined capacity.
 Example, it lets you disable an interface when it has used 99% of it's available
 bandwidth for the month.
 
-h4. Current Capabilities
-
+**Current Capabilities**
 Currently, tcd can poll for statistics, store those statistics, and triggers
 the necessary actions to run when they are intended.
 
 
-h4. Configuration (Profiles)
-
+**Configuration (Profiles)**
 Configuration is done in two parts - configuring a profile, and writing a
 trigger.
 The profile contains the information necessary for determining if an interface
