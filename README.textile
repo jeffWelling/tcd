@@ -70,7 +70,7 @@ So, for a connection with a 60GB capacity limit, this would look like
 @{ :eth0 => 64424509440  }@
 
 
-h4. Configuration (Ways of **getStats()**-ing)
+**Configuration (Ways of getStats()-ing)**
 tcd does not itself provide a way to collect statistics from anywhere - instead we
 require that you write the getStats method for your profile yourself.  This means,
 though some of the work is offloaded, it is also abstracted. You can plug tcd
