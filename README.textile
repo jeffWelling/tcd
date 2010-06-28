@@ -1,22 +1,28 @@
 h1=. tcd (traffic control daemon)
 
 =====================================================================
-tcd is a traffic control daemon which uses live monitoring of 
-traffic, combined with user specified rules for which protocols are
-more important than others (voip over ssh, over gaming, over http 
-and file transfers, etc.), and tweaks the settings of "tcng":http://tcng.sourceforge.net/ or "tc":http://linux.die.net/man/8/tc 
-to guarantee the service levels desired, on the fly.
-
+tcd is a small Ruby program to collect statistics about your network interfaces
+and then use that information to allow you the user to specify actions or
+programs to run when an interface reaches a predetermined capacity.
+Example, it lets you disable an interface when it has used 99% of it's available
+bandwidth for the month.
 
 h4. Current Capabilities
-
-Currently, tcd collects statistics and stores them to keep track of and report back 
-to the user how much bandwidth has been used within their billing cycle.  
-Configuration of tcd is done via profiles, which are located in the 
-lib/tcd/profiles/ directory.  There should be an example profile in that directory.
+Currently, tcd can poll for statistics, store those statistics, and triggers
+the necessary actions to run when they are intended.
 
 
 h4. Configuration (Profiles)
+Configuration is done in two parts - configuring a profile, and writing a
+trigger.
+The profile contains the information necessary for determining if an interface
+has gone over it's bandwidth capacity for the month.  Information like how to
+collect statistics on that interface, the rollover day for the interface billing
+cycle, what the maximum capacity of an interface is.
+The trigger is what tells TCD what to do when an interface reaches a certain level.
+You will usually need two triggers, one to throttle your interface if it goes over
+capacity, and another trigger to undo the throttling when your billing cycle rolls
+over.
 
 A profile consists of a couple of methods,
 
@@ -65,24 +71,42 @@ So, for a connection with a 60GB capacity limit, this would look like
 
 
 h4. Configuration (Ways of **getStats()**-ing)
+tcd does not itself provide a way to collect statistics from anywhere - instead we
+require that you write the getStats method for your profile yourself.  This means,
+though some of the work is offloaded, it is also abstracted. You can plug tcd
+in to any traffic of statistical analysis tools you like.  Personally I prefer keeping
+it simple, therefor I suggest using either a couple Iptables rules as I currently do,
+or using pmacct.  Pmacct is a very neat little program which is capable of various
+traffic statistics collection options.
 
-Currently, I use a fairly simple, and to the best of my investigating fairly secure setup
-where I created two new ssh keys in the tcd directory, both without passphrases.  One for
-the in traffic and one for the out traffic.  Then, I copied the keys to my gateway
-machine and appended them to my authorized_keys file, but before logging out, I edited
-the lines that I'd just added to the authorized_keys file.  Where the lines began as
+Aggregating statistics from multiple gateways or multiple interfaces is sometimes best
+done on a machine other than the gateway(s) itself.  Ideally you want to congregate all
+statistics to one machine which you run the tcd_collector daemon on and which stores
+the stats and executes the scheduled triggers.  This raises the question of how to
+get the stats from the output of iptables or pmacct from one machine to another.
+For this I use ssh, and the noted ability of locking down certain ssh keys so that when
+a key is used to login, that login session dumps the output of a pre-set command and then
+closes the session.  
+
+Example...
+
+Currently, I use a fairly simple - and to the best of my investigating, fairly secure - 
+setup.  I created two new ssh keys in the tcd directory, both without passphrases.  
+One for the in traffic and one for the out traffic.  Then, I copied the keys to my gateway
+machine and appended them to my authorized_keys file, but before finishing, I edited
+the lines that I'd just added to the authorized_keys file, such that the lines that began as
 
 @ssh-rsa AAAAB3N...=@
 @ssh-rsa AAAAB3N...=@
 
-I changed them to
+Changed to
 
 @command="/usr/bin/pmacct -s -e -p /tmp/pmacct_eth2_tcd_in.pipe" ssh-rsa AAAAB3N...=@
 @command="/usr/bin/pmacct -s -e -p /tmp/pmacct_eth2_tcd_out.pipe" ssh-rsa AAAAB3N...=@
 
 OK now lets point out some things.  This tells ssh that logging in with that key means
 that the user is allowed to login, to recieve the output of command="" executing, and
-then log out again. And nothing else.  Don't take my word for it, try it for yourself.
+then log out again. And nothing else.  Don't take my word for it, test it for yourself.
 If you want to be even more secure you can use from= to only allow logins from specific
 hosts.
 
