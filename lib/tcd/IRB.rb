@@ -84,7 +84,7 @@ module TCD
             #For every percent point between now and last run, do
             #   Triggers.update
             current_usage= percentOfCapacity mod, interface
-            last_usage= Triggers.getLastRunUsage( mod.to_sym, interface)
+            last_usage= Triggers.getLastTriggerUpdate( mod.to_sym, interface)
             puts "#{current_usage}   #{last_usage}"
             
             (last_usage..current_usage).each {|percent|

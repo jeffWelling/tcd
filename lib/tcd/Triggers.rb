@@ -28,10 +28,11 @@ module TCD
     #     period.
     @triggers={}
     @trigger_log=[]
+    @trigger_update_log=[]
     class << self
       
       attr_reader :triggers
-      attr_accessor :trigger_log
+      attr_accessor :trigger_log, :trigger_update_log
       #Register *rules under profile_name, interface, and percent.
       #This is called by the user to register the rules they want and when they want to run them.  It
       # should be called from the user written profile. 
@@ -57,6 +58,7 @@ module TCD
       #Run any triggers associated with this percent for this interface on this profile_name
       #Intended to be run from IRB.runTriggers
       def update profile_name, interface, percent
+        logTriggerUpdate(profile_name, interface, percent)
         profile_name=profile_name.to_sym
         interface=interface.to_sym
         @triggers[profile_name][interface][percent].each {|rules|
@@ -79,15 +81,39 @@ module TCD
         Storage.writeTriggerLog
       end
 
-      #get the percentage (as an int) that the profile/interface/percent was last run at
+      #get the percentage (as an int) that a trigger for profile/interface was last triggered at
       #If the last time the trigger was run was in the last billing cycle, 0 will be returned.
       #If the trigger has never been run before, it will return zero.
-      def getLastRunUsage profile_name, interface
+      def getLastTriggerRun profile_name, interface
         !@trigger_log.empty? || @trigger_log=Storage.readTriggerLog
         trigger=(@trigger_log[profile_name.to_sym][interface.to_sym] rescue return(0))
         return 0 if trigger.nil?
         rollover_day=eval("Profiles::#{profile_name.to_s}.rolloverDay[:#{interface}]")
         Storage.writeTriggerLog
+        Profiles.inCurrentCycle?( rollover_day, trigger[0] ) ? trigger[1] : 0
+      end
+      #log the percent that this trigger update was run at so we know what we've missed
+      #on the next run.
+      def logTriggerUpdate profile_name, interface, percent
+        puts "logTriggerUpdate: #{profile_name}, #{interface}, #{percent}"
+        @trigger_update_log=Hash.new if @trigger_update_log.empty?
+        @trigger_update_log.merge!( profile_name=>{} ) unless @trigger_update_log.include?(profile_name)
+        @trigger_update_log[profile_name].merge!( interface=>false ) unless @trigger_update_log.include?(interface)
+        @trigger_update_log[profile_name][interface]= [DateTime.now, percent]
+        Storage.writeTriggerUpdateLog
+      end
+      #get the percentage (as an int) that triggers were last updated at
+      #Note the difference between this and getLastTriggerRun is that this returns
+      #the last percent that TCD::Triggers.update was last called at, getLastTriggerRun
+      #returns the last percent for profile/interface that caused a scheduled trigger to run.
+      #If the last time the trigger was run was in the last billing cycle, 0 will be returned.
+      #If the trigger has never been run before, it will return zero.
+      def getLastTriggerUpdate profile_name, interface
+        !@trigger_update_log.empty? || @trigger_update_log=Storage.readTriggerUpdateLog
+        trigger=(@trigger_update_log[profile_name.to_s][interface.to_sym] rescue return(0))
+        return 0 if trigger.nil?
+        rollover_day=eval("Profiles::#{profile_name.to_s}.rolloverDay[:#{interface}]")
+        Storage.writeTriggerUpdateLog
         Profiles.inCurrentCycle?( rollover_day, trigger[0] ) ? trigger[1] : 0
       end
     end
