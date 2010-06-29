@@ -49,6 +49,7 @@ module TCD
           exit
         end
         begin
+          log "Running getAllProfileStats()"
           stats=TCD::IRB.getAllProfileStats
         rescue Exception => e
           log "#{e.to_s}"
@@ -56,14 +57,17 @@ module TCD
         end
         
         begin
+          log "Running aggregateAll()"
           x=TCD::IRB.aggregateAll
 #          log x.to_s
         rescue Exception => e
           log "#{e.to_s}"
           log "There was an error when aggregateAll was called!"
         end
+        log "Sleeping for 60"
         sleep 60
         begin
+          log "Running runTriggers()"
           x=TCD::IRB.runTriggers
 #          log x.to_s
         rescue Exception => e
