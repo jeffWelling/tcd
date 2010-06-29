@@ -47,8 +47,8 @@ module TCD
       end
       #Read stats, using the block provided to determine if the record should be included
       #assuming a block is provided
-      def readStats profile_name, interface, use_sums=nil, &blk
-        readStatsFromDisk profile_name, interface, use_sums, &blk
+      def readStats profile_name, interface, use_sums=nil, more, &blk
+        readStatsFromDisk profile_name, interface, use_sums, more, &blk
       end
       #Save stats to disk in a ~/.tcd/stats/$profile_name/$if/$timestamp.yaml manner
       def saveStatsToDisk stats
