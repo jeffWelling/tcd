@@ -112,6 +112,24 @@ module TCD
         extend Common
         writeFile( YAML.dump(Triggers.trigger_log), 'trigger_log.yaml' )
       end
+      #Write the trigger update log to disk
+      def readTriggerUpdateLog
+        extend Common
+        trigger_update_log=Triggers.trigger_update_log=( YAML.load(readFile( '~/.tcd/trigger_update_log.yaml' ).join) rescue {:all=>{:all=>[]}})
+        #Convert Time to DateTime
+        trigger_update_log={:all=>{:all=>[]}} unless trigger_update_log
+        trigger_update_log.each_key {|profile|
+          trigger_update_log[profile].each_key {|interface|
+            next unless trigger_update_log[profile][interface].length > 0
+            trigger_update_log[profile][interface][0]= DateTime.parse(trigger_update_log[profile][interface][0].to_s)
+          }
+        }
+        trigger_update_log
+      end
+      def writeTriggerUpdateLog
+        extend Common
+        writeFile( YAML.dump(Triggers.trigger_update_log), 'trigger_update_log.yaml' )
+      end
     end
   end
 end
