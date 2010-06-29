@@ -32,7 +32,7 @@ module TCD
           stats.merge!( {profile_name => {}} ) unless stats.has_key? profile_name
           TCD::Profiles.getInterfaces( profile_name ).each {|interface|
             stats[profile_name].merge!( { interface.to_sym => {:in=>[], :out=>[]} } ) unless stats[profile_name].has_key? interface.to_sym
-            old_stats=TCD::Storage.readStats(profile_name, interface.to_s) {|path| 
+            old_stats=TCD::Storage.readStatsFromDisk(profile_name, interface.to_s) {|path| 
               TCD::Profiles.PathInCurrentCycle?(profile_name, interface.to_s, path) 
             }
             old_stats[:in].each {|x| stats[profile_name][interface.to_sym][:in] << x}
