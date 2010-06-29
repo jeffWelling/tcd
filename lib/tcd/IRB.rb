@@ -85,8 +85,10 @@ module TCD
             #   Triggers.update
             current_usage= percentOfCapacity mod, interface
             last_usage= Triggers.getLastRunUsage( mod.to_sym, interface)
+            puts "#{current_usage}   #{last_usage}"
             
             (last_usage..current_usage).each {|percent|
+              puts "Running trigger for #{mod}  -  #{interface}  -  #{percent} - #{current_usage} #{last_usage}"
               TCD::Triggers.update( mod, interface, percent )
             }
           }
