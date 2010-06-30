@@ -43,7 +43,7 @@ module TCD
       end
       #Store the results of running getAllProfileStats
       def saveStats stats
-        saveStatsToDisk stats
+        writeStatsToMemory stats
       end
       #Read stats, using the block provided to determine if the record should be included
       #assuming a block is provided
