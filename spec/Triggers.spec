@@ -70,6 +70,6 @@ describe Triggers do
     Triggers.register( $profile, $interface, $percent, $rules )
     #Note that calling register is only here because without it, $profile doesn't get defined.
     Triggers.logTrigger( $profile, $interface, 42 )
-    Triggers.getLastRunUsage( $profile, $interface ).should == 42
+    Triggers.getLastTriggerRun( $profile, $interface ).should == 42
   end
 end
