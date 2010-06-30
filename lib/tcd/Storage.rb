@@ -118,10 +118,12 @@ module TCD
           @in_memory_stats[profile_name].each_key {|interface|
             next if @in_memory_stats[profile_name][interface]==:timestamp
             #remove out of cycle bandwidth=>date sets
-            @in_memory_stats[profile_name][interface]=@in_memory_stats[profile_name][interface].delete_if {|stat_dates, xenu|
-              date=xenu
-              date=date[0] if date.class==Array
-              !Profiles.dateTimeInCurrentCycle?(profile_name, interface, DateTime.parse(date[1]))
+            @in_memory_stats[profile_name][interface]=@in_memory_stats[profile_name][interface].each_pair {|direction, dates|
+              
+              @in_memory_stats[profile_name][interface][direction].delete_if {|stat_dates|
+                date=stat_dates[1]
+                !Profiles.dateTimeInCurrentCycle?(profile_name, interface, DateTime.parse(date))
+              } unless @in_memory_stats[profile_name][interface][direction].empty?
             }
           }
         }
