@@ -50,15 +50,15 @@ describe IRB do
     out_counter=0
     n.times do
       time=Time.parse("May 17 2009 0:00:00").+(n_n+=seconds_between_statfiles)     #An arbitrary date, starting at 0:00:00
-      stats={ :Foobar=> {
+      stats={ 'Foobar'=> {
         :timestamp=>time,
-        :eth1=>{ :in=>1, :out=> 1}}
+        :eth0=>{ :in=>1, :out=> 1}}
        }
       in_counter+=1
       out_counter+=1
-      Storage.saveStatsToDisk stats
+      Storage.saveStats stats
     end
-    read_stats=Storage.readStats(:Foobar, :eth1) { true }
+    read_stats=Storage.readStats('Foobar', :eth0) { true }
     (read_stats[:in].size + read_stats[:out].size).should == in_counter+out_counter
     
     FileUtils.rm_rf File.expand_path("~/.tcd/stats/Foobar")
