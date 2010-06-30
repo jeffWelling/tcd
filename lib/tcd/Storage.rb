@@ -89,7 +89,7 @@ module TCD
       def readStatsFromMemory profile_name, interface, use_sums, more_than_this_cycle=false, &blk
         @in_memory_stats=initMemCounter if @in_memory_stats.nil?
         return readStatsFromDisk(profile_name, interface, use_sums, &blk) if more_than_this_cycle
-        @in_memory_stats[profile_name][interface]
+        @in_memory_stats[profile_name.to_s][interface.to_sym] rescue {:in=>[],:out=>[]}
       end
       def writeStatsToMemory stats
         saveStatsToDisk stats
