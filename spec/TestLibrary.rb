@@ -55,6 +55,7 @@ module TestLibrary
 end
 
 def _defmethod profile, interface, _in,  _out, rollover,  max
+  puts "profile_name #{profile}   interface #{interface}  _in #{_in}  out #{_out}    rollover #{rollover}   max #{max}"
   mod=" 
     module TCD
       module Profiles
