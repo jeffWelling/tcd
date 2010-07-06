@@ -112,7 +112,18 @@ module TCD
         puts "readStatsFromMemory"
         @in_memory_stats=initMemCounter if @in_memory_stats.nil?
         return readStatsFromDisk(profile_name, interface, use_sums, &blk) if more_than_this_cycle
-        @in_memory_stats[profile_name.to_s][interface.to_sym] rescue {:in=>[],:out=>[]}
+        stats={:in=>[],:out=>[]}
+        @in_memory_stats.each_key {|t|
+          @in_memory_stats[t][profile_name.to_s][interface.to_sym][:in].each {|percent_datetime|
+            stats[:in] << percent_datetime
+          }
+          @in_memory_stats[t][profile_name.to_s][interface.to_sym][:out].each{|percent_datetime|
+            stats[:out] << percent_datetime
+          }
+          #stats[:in] << @in_memory_stats[t][profile_name.to_s][interface.to_sym][:in]
+          #stats[:out]<< @in_memory_stats[t][profile_name.to_s][interface.to_sym][:out]
+        }
+        stats
       end
       def writeStatsToMemory stats
         puts 'writeStatsToMemory'
