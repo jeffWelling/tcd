@@ -25,6 +25,8 @@ module TCD
     class << self
       attr_accessor :in_memory_stats
       def initMemCounter
+        puts "initMemCounter"
+        sleep 2
         #{"Gir2"=> {"eth1"=> [] }}
         stats={}
         TCD::Profiles.profiles.each {|profile|
@@ -43,15 +45,20 @@ module TCD
       end
       #Store the results of running getAllProfileStats
       def saveStats stats
+        puts "saveStats"
+        require 'pp'
+        pp stats
         writeStatsToMemory stats
       end
       #Read stats, using the block provided to determine if the record should be included
       #assuming a block is provided
       def readStats profile_name, interface, use_sums=nil, more=false, &blk
+        puts "readStats"
         readStatsFromMemory profile_name, interface, use_sums, more, &blk
       end
       #Save stats to disk in a ~/.tcd/stats/$profile_name/$if/$timestamp.yaml manner
       def saveStatsToDisk stats
+        puts "saveStatsToDisk"
         extend TCD::Common
         stats.each_key {|profile_name|
           timestamp= stats[profile_name][:timestamp]
@@ -69,6 +76,9 @@ module TCD
       #in succession and must return true if that path should be read and included in the tally
       #returned to the user.
       def readStatsFromDisk profile_name, interface, use_sums=nil, more=nil, &blk
+        require 'pp'
+        pp caller
+        puts "readStatsFromDisk #{profile_name} #{interface} #{use_sums}"
         values={:in=>[],:out=>[]}
         Dir.glob(File.expand_path("~/.tcd/stats/#{profile_name}/#{interface}/**/*")).each {|path|
           next unless path[STAT_FILE_REGEX]
@@ -87,11 +97,13 @@ module TCD
         values
       end
       def readStatsFromMemory profile_name, interface, use_sums, more_than_this_cycle=false, &blk
+        puts "readStatsFromMemory"
         @in_memory_stats=initMemCounter if @in_memory_stats.nil?
         return readStatsFromDisk(profile_name, interface, use_sums, &blk) if more_than_this_cycle
         @in_memory_stats[profile_name.to_s][interface.to_sym] rescue {:in=>[],:out=>[]}
       end
       def writeStatsToMemory stats
+        puts 'writeStatsToMemory'
         saveStatsToDisk stats
         @in_memory_stats=initMemCounter if @in_memory_stats.nil?
         stats.each_key {|profile_name|
@@ -112,6 +124,7 @@ module TCD
         cleanInMemCounters
       end
       def cleanInMemCounters
+        puts 'cleanInMemCounters'
         extend Profiles
         return nil if @in_memory_stats.nil?
         @in_memory_stats.each_key {|profile_name|

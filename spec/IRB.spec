@@ -50,6 +50,7 @@ describe IRB do
     out_counter=0
     n.times do
       time=Time.parse("May 17 2009 0:00:00").+(n_n+=seconds_between_statfiles)     #An arbitrary date, starting at 0:00:00
+      puts "time #{time.to_s}"
       stats={ 'Foobar'=> {
         :timestamp=>time,
         :eth0=>{ :in=>1, :out=> 1}}
