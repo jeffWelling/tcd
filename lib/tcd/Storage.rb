@@ -29,16 +29,28 @@ module TCD
         sleep 2
         #{"Gir2"=> {"eth1"=> [] }}
         stats={}
+        timeslice_by=3600
         TCD::Profiles.profiles.each {|profile|
           profile_name=profile.to_s[TCD::MODULE_NAME_REGEX]
-          stats.merge!( {profile_name => {}} ) unless stats.has_key? profile_name
           TCD::Profiles.getInterfaces( profile_name ).each {|interface|
-            stats[profile_name].merge!( { interface.to_sym => {:in=>[], :out=>[]} } ) unless stats[profile_name].has_key? interface.to_sym
             old_stats=TCD::Storage.readStatsFromDisk(profile_name, interface.to_s) {|path| 
               TCD::Profiles.PathInCurrentCycle?(profile_name, interface.to_s, path) 
             }
-            old_stats[:in].each {|x| stats[profile_name][interface.to_sym][:in] << x}
-            old_stats[:out].each {|x|stats[profile_name][interface.to_sym][:out]<< x}
+            old_stats[:in].each {|percent_datetime|
+              t=(Time.parse(percent_datetime[1].to_s).to_i / timeslice_by)
+              stats.merge!( {t=>{profile_name=>{interface.to_sym=>{:in=>[], :out=>[]}}}} ) unless stats.has_key? t
+              stats[t].merge!( {profile_name=>{interface.to_sym=>{:in=>[], :out=>[]}}} ) unless stats[t].has_key? profile_name
+              stats[t][profile_name].merge!( {interface.to_sym=>{:in=>[], :out=>[]}} ) unless stats[t][profile_name].has_key? interface.to_sym
+              stats[t][profile_name][interface.to_sym][:in] << percent_datetime
+              
+            }
+            old_stats[:out].each {|percent_datetime|
+              t=(Time.parse(percent_datetime[1].to_s).to_i / timeslice_by)
+              stats.merge!( {t=>{profile_name=>{interface.to_sym=>{:in=>[], :out=>[]}}}} ) unless stats.has_key? t
+              stats[t].merge!( {profile_name=>{interface.to_sym=>{:in=>[], :out=>[]}}} ) unless stats[t].has_key? profile_name
+              stats[t][profile_name].merge!( {interface.to_sym=>{:in=>[], :out=>[]}} ) unless stats[t][profile_name].has_key? interface.to_sym
+              stats[t][profile_name][interface.to_sym][:out] << percent_datetime
+            }
           }
         }
         stats
