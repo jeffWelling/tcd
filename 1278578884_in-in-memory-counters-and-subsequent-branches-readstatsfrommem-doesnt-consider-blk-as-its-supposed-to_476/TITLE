@@ -1,0 +1,1 @@
+in in_memory_counters (and subsequent) branches, readStatsFromMem doesnt consider &blk as its supposed to
