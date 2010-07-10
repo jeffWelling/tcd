@@ -136,13 +136,14 @@ module TCD
             next if interface==:timestamp
             
             @in_memory_stats=Hash.new if @in_memory_stats.nil?
-            @in_memory_stats[profile_name.to_s]=Hash.new if @in_memory_stats[profile_name.to_s].nil?
-            @in_memory_stats[profile_name.to_s][interface]=Hash.new if @in_memory_stats[profile_name.to_s][interface].nil?
-            @in_memory_stats[profile_name.to_s][interface][:in]= Array.new if @in_memory_stats[profile_name.to_s][interface][:in].nil?
-            @in_memory_stats[profile_name.to_s][interface][:out]= Array.new if @in_memory_stats[profile_name.to_s][interface][:out].nil?
+            @in_memory_stats[t]=Hash.new if @in_memory_stats.nil?
+            @in_memory_stats[t][profile_name.to_s]=Hash.new if @in_memory_stats[t][profile_name.to_s].nil?
+            @in_memory_stats[t][profile_name.to_s][interface]=Hash.new if @in_memory_stats[t][profile_name.to_s][interface].nil?
+            @in_memory_stats[t][profile_name.to_s][interface][:in]= Array.new if @in_memory_stats[t][profile_name.to_s][interface][:in].nil?
+            @in_memory_stats[t][profile_name.to_s][interface][:out]= Array.new if @in_memory_stats[t][profile_name.to_s][interface][:out].nil?
 
-            @in_memory_stats[profile_name.to_s][interface][:in] << [stats[profile_name][interface][:in],timestamp.to_s]
-            @in_memory_stats[profile_name.to_s][interface][:out] <<[stats[profile_name][interface][:out],timestamp.to_s]
+            @in_memory_stats[t][profile_name.to_s][interface][:in] << [stats[profile_name][interface][:in],timestamp.to_s]
+            @in_memory_stats[t][profile_name.to_s][interface][:out] <<[stats[profile_name][interface][:out],timestamp.to_s]
           }
         }
         cleanInMemCounters
