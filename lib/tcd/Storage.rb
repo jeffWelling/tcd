@@ -19,6 +19,7 @@
 =end
 module TCD
   module Storage
+    TIMESLICE_BY=3600
     @in_memory_stats=nil
     #@in_memory_stats={ Profile_name => { interface => { :in => [[ i, date ]...],
     #                                                    :out=> [[ i, date ]...]}
@@ -29,7 +30,6 @@ module TCD
         sleep 2
         #{"Gir2"=> {"eth1"=> [] }}
         stats={}
-        timeslice_by=3600
         TCD::Profiles.profiles.each {|profile|
           profile_name=profile.to_s[TCD::MODULE_NAME_REGEX]
           TCD::Profiles.getInterfaces( profile_name ).each {|interface|
@@ -37,7 +37,7 @@ module TCD
               TCD::Profiles.PathInCurrentCycle?(profile_name, interface.to_s, path) 
             }
             old_stats[:in].each {|percent_datetime|
-              t=(Time.parse(percent_datetime[1].to_s).to_i / timeslice_by)
+              t=(Time.parse(percent_datetime[1].to_s).to_i / TIMESLICE_BY)
               stats.merge!( {t=>{profile_name=>{interface.to_sym=>{:in=>[], :out=>[]}}}} ) unless stats.has_key? t
               stats[t].merge!( {profile_name=>{interface.to_sym=>{:in=>[], :out=>[]}}} ) unless stats[t].has_key? profile_name
               stats[t][profile_name].merge!( {interface.to_sym=>{:in=>[], :out=>[]}} ) unless stats[t][profile_name].has_key? interface.to_sym
@@ -45,7 +45,7 @@ module TCD
               
             }
             old_stats[:out].each {|percent_datetime|
-              t=(Time.parse(percent_datetime[1].to_s).to_i / timeslice_by)
+              t=(Time.parse(percent_datetime[1].to_s).to_i / TIMESLICE_BY)
               stats.merge!( {t=>{profile_name=>{interface.to_sym=>{:in=>[], :out=>[]}}}} ) unless stats.has_key? t
               stats[t].merge!( {profile_name=>{interface.to_sym=>{:in=>[], :out=>[]}}} ) unless stats[t].has_key? profile_name
               stats[t][profile_name].merge!( {interface.to_sym=>{:in=>[], :out=>[]}} ) unless stats[t][profile_name].has_key? interface.to_sym
@@ -131,6 +131,7 @@ module TCD
         @in_memory_stats=initMemCounter if @in_memory_stats.nil?
         stats.each_key {|profile_name|
           timestamp= DateTime.parse( stats[profile_name][:timestamp].to_s )
+          t= (Time.parse(timestamp.to_s).to_i / TIMESLICE_BY) 
           stats[profile_name].each_key {|interface|
             next if interface==:timestamp
             
