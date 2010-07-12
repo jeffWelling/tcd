@@ -130,7 +130,7 @@ module TCD
         saveStatsToDisk stats
         @in_memory_stats=initMemCounter if @in_memory_stats.nil?
         stats.each_key {|profile_name|
-          timestamp= DateTime.parse( stats[profile_name][:timestamp].to_s )
+          timestamp= DateTime.parse( stats[profile_name][:timestamp].to_s.gsub(/-\d{4}/,'') )  #remove timezone offset
           t= (Time.parse(timestamp.to_s).to_i / TIMESLICE_BY) 
           stats[profile_name].each_key {|interface|
             next if interface==:timestamp
