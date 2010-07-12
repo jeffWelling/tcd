@@ -152,16 +152,15 @@ module TCD
         puts 'cleanInMemCounters'
         extend Profiles
         return nil if @in_memory_stats.nil?
-        @in_memory_stats.each_key {|profile_name|
-          @in_memory_stats[profile_name].each_key {|interface|
-            next if @in_memory_stats[profile_name][interface]==:timestamp
-            #remove out of cycle bandwidth=>date sets
-            @in_memory_stats[profile_name][interface]=@in_memory_stats[profile_name][interface].each_pair {|direction, dates|
-              
-              @in_memory_stats[profile_name][interface][direction].delete_if {|stat_dates|
-                date=stat_dates[1]
-                !Profiles.dateTimeInCurrentCycle?(profile_name, interface, DateTime.parse(date))
-              } unless @in_memory_stats[profile_name][interface][direction].empty?
+        @in_memory_stats.each_key {|timeslice|
+          datetime=DateTime.parse(Time.at( timeslice * TIMESLICE_BY ).to_s)
+          @in_memory_stats[timeslice].each_key {|profile_name|
+            @in_memory_stats[timeslice][profile_name].each_key {|interface|
+              @in_memory_stats.delete_if {|timeslice, data|
+                true unless TCD::Profiles.dateTimeInCurrentCycle?( profile_name, interface, DateTime.parse( 
+                  Time.at(timeslice * TIMESLICE_BY).to_s
+                ))
+              }
             }
           }
         }
