@@ -136,7 +136,7 @@ module TCD
             next if interface==:timestamp
             
             @in_memory_stats=Hash.new if @in_memory_stats.nil?
-            @in_memory_stats[t]=Hash.new if @in_memory_stats.nil?
+            @in_memory_stats[t]=Hash.new if @in_memory_stats[t].nil?
             @in_memory_stats[t][profile_name.to_s]=Hash.new if @in_memory_stats[t][profile_name.to_s].nil?
             @in_memory_stats[t][profile_name.to_s][interface]=Hash.new if @in_memory_stats[t][profile_name.to_s][interface].nil?
             @in_memory_stats[t][profile_name.to_s][interface][:in]= Array.new if @in_memory_stats[t][profile_name.to_s][interface][:in].nil?
