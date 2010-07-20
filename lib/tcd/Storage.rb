@@ -152,9 +152,26 @@ module TCD
         puts 'cleanInMemCounters'
         extend Profiles
         return nil if @in_memory_stats.nil?
+        rollovers={}
+        TCD::Profiles.profiles.each {|profile|
+          profile_name= profile.to_s[MODULE_NAME_REGEX]
+          rollovers.merge!( {profile_name => {}} ) unless
+            rollovers.has_key? profile_name
+          TCD::Profiles.getInterfaces( profile_name ).each {|i|
+            r_date=TCD::Profiles.lastRolloverDate( eval("#{profile}.rolloverDay[#{i}]"))
+            rollovers[profile_name].merge!( {i=> r_date} ) unless rollovers[profile_name].has_key? i  
+          } 
+        }
+        require 'pp'
+        pp rollovers
+
         @in_memory_stats.each_key {|timeslice|
           datetime=DateTime.parse(Time.at( timeslice * TIMESLICE_BY ).to_s)
           @in_memory_stats[timeslice].each_key {|profile_name|
+            require 'pp'
+            pp @in_memory_stats[timeslice]
+            pp profile_name
+            pp @in_memory_stats[timeslice].keys
             @in_memory_stats[timeslice][profile_name].each_key {|interface|
               @in_memory_stats.delete_if {|timeslice, data|
                 true unless TCD::Profiles.dateTimeInCurrentCycle?( profile_name, interface, DateTime.parse( 
