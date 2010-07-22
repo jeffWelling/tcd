@@ -158,7 +158,7 @@ module TCD
           rollovers.merge!( {profile_name => {}} ) unless
             rollovers.has_key? profile_name
           TCD::Profiles.getInterfaces( profile_name ).each {|i|
-            r_date=TCD::Profiles.lastRolloverDate( eval("#{profile}.rolloverDay[#{i}]"))
+            r_date=TCD::Profiles.lastRolloverDate( eval("#{profile}.rolloverDay[:#{i}]"))
             rollovers[profile_name].merge!( {i=> r_date} ) unless rollovers[profile_name].has_key? i  
           } 
         }
