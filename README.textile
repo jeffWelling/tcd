@@ -1,11 +1,11 @@
 h1=. tcd (traffic control daemon)
 
 =====================================================================
-tcd is a small Ruby program to collect statistics about your network interfaces
-and then use that information to allow you the user to specify actions or
-programs to run when an interface reaches a predetermined capacity.
-Example, it lets you disable an interface when it has used 99% of it's available
-bandwidth for the month.
+tcd is a small Ruby program to collect statistics about your network 
+interfaces and then use that information to allow you the user to 
+specify actions or programs to run when an interface reaches a 
+predetermined capacity. Example, it lets you disable an interface when 
+it has used 99% of it's available bandwidth for the month.
 
 **Current Capabilities**
 Currently, tcd can poll for statistics, store those statistics, and triggers
